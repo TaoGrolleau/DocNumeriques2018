@@ -5,29 +5,29 @@
             - si il n'y a pas de numéro d'autorisation, le message sera forcément une demande d'autorisation, sinon le fichier est refusé
             - sinon on lis les différents messages  -->
 
-            <!ELEMENT FicID (#PCDATA)> <!-- ID du fichier -->
             <xsd:element name="FicId" type="xsd:string">
+            <!-- !ELEMENT FicID (#PCDATA)> *** ID du fichier -->
 
-            <!ELEMENT NmIE (#PCDATA)> <!-- Nom Émetteur -->
             <xsd:element name="NmIE" type="xsd:string">
+            <!-- !ELEMENT NmIE (#PCDATA)> *** Nom Émetteur -->
 
-            <!ELEMENT NmIR (#PCDATA)> <!-- Nom Récepteur -->
             <xsd:element name="NmIR" type="xsd:string">
+            <!-- !ELEMENT NmIR (#PCDATA)> *** Nom Récepteur -->
 
-            <!ELEMENT NumAuto (#PCDATA)>
             <xsd:element name="NumAuto" type="xsd:integer">
+            <!-- !ELEMENT NumAuto (#PCDATA)> -->
 
-            <!ELEMENT DtOfSgtAuto (#PCDATA)>
             <xsd:element name="DtOfSgtAuto" type="xsd:date">
+            <!-- !ELEMENT DtOfSgtAuto> (#PCDATA)> -->
 
-            <!ELEMENT DureeValidAuto (#PCDATA)>
             <xsd:element name="DureeValidAuto" type="xsd:timeInstant">
+            <!-- !ELEMENT DureeValidAuto (#PCDATA)> -->
 
-            <!ELEMENT MailDest (#PCDATA)>
             <xsd:element name="MailDest" type="xsd:string">
+            <!-- !ELEMENT MailDest (#PCDATA)> -->
 
-            <!ELEMENT MailExp (#PCDATA)>
             <xsd:element name="MailExp" type="xsd:string">
+            <!-- !ELEMENT MailExp (#PCDATA)> -->
 
 
         <!ELEMENT Body (CollMess)>
@@ -37,40 +37,60 @@
                 <!ELEMENT Message (Dte, DureeValideMsg, (Prop|Auth|Dmd|Accep))>
                 <!ATTLIST Message MsgId ID #REQUIRED>
                 <!ATTLIST Message ReponseA IDREF #OPTIONNAL>
-                <!ELEMENT Dte (#PCDATA)> <!-- Date du message -->
-                <xsd:element name="Dte" type="xsd:date">
 
-                <!ELEMENT DureeValideMsg (#PCDATA)>
+                <xsd:element name="Dte" type="xsd:date">
+                <!-- !ELEMENT Dte (#PCDATA)> *** Date du message -->
+
+                <xsd:element name="DureeValideMsg" type = "timeInstant">
+                <!-- !ELEMENT DureeValideMsg (#PCDATA)> -->
 
                 <!ELEMENT Prop(TitreP, Offre?, Demande?)>
-                    <!ELEMENT TitreP (#PCDATA)>
                     <xsd:element name="TitreP" type="xsd:string">
+                    <!-- !ELEMENT TitreP (#PCDATA)> -->
 
                     <!ELEMENT Offre (Objet+)>
                     <!ELEMENT Demande (Objet+)>
                     <!ELEMENT Objet (NomObjet, Type, Description)>
                     <!-- Type est la catégorie, Description est la description de l'objet du troc-->
-                    <!ELEMENT NomObjet (#PCDATA)>
                     <xsd:element name="NomObjet" type="xsd:string">
+                    <!-- !ELEMENT NomObjet (#PCDATA)> -->
 
-                    <!ELEMENT Type (#PCDATA)>
+                    <xsd:element name="Type" type="xsd:string">
+                    <!-- !ELEMENT Type (#PCDATA)> -->
+
                     <!ELEMENT Description (Parametre+)>
                         <!ELEMENT Parametre (Nom, Valeur)>
-                        <!ELEMENT Nom (#PCDATA)>
-                        <!ELEMENT Valeur (#PCDATA)>
+
+                        <xsd:element name="Nom" type="xsd:string">
+                        <!-- !ELEMENT Nom (#PCDATA)> -->
+
+                        <xsd:element name="Valeur" type="xsd:string">
+                        <!-- !ELEMENT Valeur (#PCDATA)> -->
 
                 <!-- DescDmd : description de la demande, exemple : "je veut troquer avec toi "-->
                 <!ELEMENT Dmd (DescDmd, DateDebut, DateFin)>
-                    <!ELEMENT DescDmd (#PCDATA)>
-                    <!ELEMENT DateDebut (#PCDATA)>
-                    <!ELEMENT DateFin (#PCDATA)>
+
+                    <xsd:element name="DescDmd" type="xsd:string">
+                    <!-- !ELEMENT DescDmd (#PCDATA)> -->
+
+                    <xsd:element name="DateDebut" type="xsd:date">
+                    <!-- !ELEMENT DateDebut (#PCDATA)> -->
+
+                    <xsd:element name="DateFin" type="xsd:date">
+                    <!-- !ELEMENT DateFin (#PCDATA)> -->
 
                 <!ELEMENT Auth(Rep)>
                 <!--Cette balise est la réponse à une demande d'autorisation (Dmd) -->
                     <!ELEMENT Rep (AccAuth | RefAuth)>
-                    <!ELEMENT AccAuth (#PCDATA)>
-                    <!ELEMENT RefAuth (#PCDATA)>
+
+                    <xsd:element name="AccAuth" type="xsd:string">
+                    <!-- !ELEMENT AccAuth (#PCDATA)> -->
+
+                    <xsd:element name="RefAuth" type="xsd:string">
+                    <!-- !ELEMENT RefAuth (#PCDATA)> -->
 
                 <!ELEMENT Accep (MessageValid | ContreProp)>
-                    <!ELEMENT MessageValid (#PCDATA)>
+
+                    <xsd:element name="MessageValid" type="xsd:string">
+                    <!-- !ELEMENT MessageValid (#PCDATA)> -->
                     <!ELEMENT ContreProp (Prop)>
