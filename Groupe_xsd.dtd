@@ -1,74 +1,113 @@
-<!DOCTYPE troc [
-    <!ELEMENT Fichier(Header, Body)>
-        <!ELEMENT Header(FicID, NmIE, NmIR, NumAuto?, DtOfSgutAuto?, DureeValidAuto?, MailDest?, MailExp?)>
+<!DOCTYPE troc>
+    <!--<!ELEMENT Fichier(Header, Body)>-->
+    <xsd:element name=fichier>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name=Header type="headerType">
+                <xsd:element name=Body type="BodyType">
+            </xsd:sequence>
+        </xsd:complexType>
+   </xsd:element>
+            <xsd:complexType name=headerType>
+            <xsd:sequence>
+        <!--<!ELEMENT Header(FicID, NmIE, NmIR, NumAuto?, DtOfSgutAuto?, DureeValidAuto?, MailDest?, MailExp?)>-->
         <!-- Les balises liés à l'autorisation sont optionnelle : 2 cas se présentent :
             - si il n'y a pas de numéro d'autorisation, le message sera forcément une demande d'autorisation, sinon le fichier est refusé
-            - sinon on lis les différents messages  -->
+            - sinon on lit les différents messages  -->
+        
+                <xsd:element name="FicId" type="xsd:string">
+                <!-- !ELEMENT FicID (#PCDATA)> *** ID du fichier -->
 
-            <xsd:element name="FicId" type="xsd:string">
-            <!-- !ELEMENT FicID (#PCDATA)> *** ID du fichier -->
+                <xsd:element name="NmIE" type="xsd:string">
+                <!-- !ELEMENT NmIE (#PCDATA)> *** Nom Émetteur -->
 
-            <xsd:element name="NmIE" type="xsd:string">
-            <!-- !ELEMENT NmIE (#PCDATA)> *** Nom Émetteur -->
+                <xsd:element name="NmIR" type="xsd:string">
+                <!-- !ELEMENT NmIR (#PCDATA)> *** Nom Récepteur -->
 
-            <xsd:element name="NmIR" type="xsd:string">
-            <!-- !ELEMENT NmIR (#PCDATA)> *** Nom Récepteur -->
+                <xsd:element name="NumAuto" type="xsd:integer">
+                <!-- !ELEMENT NumAuto (#PCDATA)> -->
 
-            <xsd:element name="NumAuto" type="xsd:integer">
-            <!-- !ELEMENT NumAuto (#PCDATA)> -->
+                <xsd:element name="DtOfSgtAuto" type="xsd:date">
+                <!-- !ELEMENT DtOfSgtAuto> (#PCDATA)> -->
 
-            <xsd:element name="DtOfSgtAuto" type="xsd:date">
-            <!-- !ELEMENT DtOfSgtAuto> (#PCDATA)> -->
+                <xsd:element name="DureeValidAuto" type="xsd:timeInstant">
+                <!-- !ELEMENT DureeValidAuto (#PCDATA)> -->
 
-            <xsd:element name="DureeValidAuto" type="xsd:timeInstant">
-            <!-- !ELEMENT DureeValidAuto (#PCDATA)> -->
+                <xsd:element name="MailDest" type="xsd:string">
+                <!-- !ELEMENT MailDest (#PCDATA)> -->
 
-            <xsd:element name="MailDest" type="xsd:string">
-            <!-- !ELEMENT MailDest (#PCDATA)> -->
+                <xsd:element name="MailExp" type="xsd:string">
+                <!-- !ELEMENT MailExp (#PCDATA)> -->
+                
+             </xsd:sequence>
 
-            <xsd:element name="MailExp" type="xsd:string">
-            <!-- !ELEMENT MailExp (#PCDATA)> -->
 
-
-        <!ELEMENT Body (CollMess)>
-            <!ELEMENT CollMess (Message+)>
-            <!ATTLIST CollMess NbOfTxs CDATA #REQUIRED>
+                <xsd:complexType name="BodyType">
+                    <xsd:element name=CollMess>
+                        <xsd:complexType>
+                            <xsd:element name=Message minOccurs=1 type="MessageType">
+                            <xsd:attribute name=NbOfTxs type="xsd:integer">
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:element>
+            </xsd:element>
             <!-- NbOfTxs sert de contrôle pour la collection de messages -->
-                <!ELEMENT Message (Dte, DureeValideMsg, (Prop|Auth|Dmd|Accep))>
-                <!ATTLIST Message MsgId ID #REQUIRED>
-                <!ATTLIST Message ReponseA IDREF #OPTIONNAL>
+            
+                <xsd:complexType name=MessageType>
+                    
+                <!--<!ELEMENT Message (Dte, DureeValideMsg, (Prop|Auth|Dmd|Accep))>-->
+                    <xsd:attribute name=MsgId type="xsd:ID">
+                <!--<!ATTLIST Message MsgId ID #REQUIRED>-->
+                    <xsd:attribute name=ReponseA type="xsd:IDREF">
+                <!--<!ATTLIST Message ReponseA IDREF #OPTIONNAL>-->
 
                 <xsd:element name="Dte" type="xsd:date">
                 <!-- !ELEMENT Dte (#PCDATA)> *** Date du message -->
 
                 <xsd:element name="DureeValideMsg" type = "timeInstant">
                 <!-- !ELEMENT DureeValideMsg (#PCDATA)> -->
-
-                <!ELEMENT Prop(TitreP, Offre?, Demande?)>
+                
+                <xsd:choice>
+                    <xsd:element name=Prop type="PropType">
+                <!--<!ELEMENT Prop(TitreP, Offre?, Demande?)>-->
+                    <xsd:complexType name="PropType">
                     <xsd:element name="TitreP" type="xsd:string">
                     <!-- !ELEMENT TitreP (#PCDATA)> -->
-
-                    <!ELEMENT Offre (Objet+)>
-                    <!ELEMENT Demande (Objet+)>
-                    <!ELEMENT Objet (NomObjet, Type, Description)>
+                    
+                    <xsd:element name=Offre type="trocType">
+                    <!--<!ELEMENT Offre (Objet+)>-->
+                    <xsd:element name=Demande typa="trocType">
+                    <!--<!ELEMENT Demande (Objet+)>-->
+                    </xsd:complexType>
+ 
+                    <xsd:complexType name="trocType">
+                    <!--<!ELEMENT Objet (NomObjet, Type, Description)>-->
                     <!-- Type est la catégorie, Description est la description de l'objet du troc-->
-                    <xsd:element name="NomObjet" type="xsd:string">
+                        <xsd:element name="NomObjet" type="xsd:string">
                     <!-- !ELEMENT NomObjet (#PCDATA)> -->
 
-                    <xsd:element name="Type" type="xsd:string">
+                        <xsd:element name="Type" type="xsd:string">
                     <!-- !ELEMENT Type (#PCDATA)> -->
+                        <xsd:element name="Description">
+                            <xsd:complexType>
+                    <!--<!ELEMENT Description (Parametre+)>-->
+                                <xsd:element name="Parametre">
+                                    <xsd:complexType>
+                        <!--<!ELEMENT Parametre (Nom, Valeur)>-->
 
-                    <!ELEMENT Description (Parametre+)>
-                        <!ELEMENT Parametre (Nom, Valeur)>
-
-                        <xsd:element name="Nom" type="xsd:string">
+                                        <xsd:element name="Nom" type="xsd:string">
                         <!-- !ELEMENT Nom (#PCDATA)> -->
 
-                        <xsd:element name="Valeur" type="xsd:string">
+                                        <xsd:element name="Valeur" type="xsd:string">
+                                     </xsd:complexType>
+                                </xsd:element>
                         <!-- !ELEMENT Valeur (#PCDATA)> -->
-
+                            </xsd:complexType>
+                    </xsd:element>
                 <!-- DescDmd : description de la demande, exemple : "je veut troquer avec toi "-->
-                <!ELEMENT Dmd (DescDmd, DateDebut, DateFin)>
+                <xsd:element name="Dmd">
+                    <xsd:complexType>
+                <!--<!ELEMENT Dmd (DescDmd, DateDebut, DateFin)>-->
 
                     <xsd:element name="DescDmd" type="xsd:string">
                     <!-- !ELEMENT DescDmd (#PCDATA)> -->
@@ -78,19 +117,40 @@
 
                     <xsd:element name="DateFin" type="xsd:date">
                     <!-- !ELEMENT DateFin (#PCDATA)> -->
-
-                <!ELEMENT Auth(Rep)>
+                    </xsd:complexType>
+                 </xsd:element>
+                 <xsd:element name="Auth">
+                    <xsd:complexType>
+                <!--<!ELEMENT Auth(Rep)>-->
                 <!--Cette balise est la réponse à une demande d'autorisation (Dmd) -->
-                    <!ELEMENT Rep (AccAuth | RefAuth)>
+                        <xsd:element name="Rep">
+                            <xsd:complexType>
+                    <!--<!ELEMENT Rep (AccAuth | RefAuth)>-->
 
-                    <xsd:element name="AccAuth" type="xsd:string">
+                                <xsd:element name="AccAuth" type="xsd:string">
                     <!-- !ELEMENT AccAuth (#PCDATA)> -->
 
-                    <xsd:element name="RefAuth" type="xsd:string">
+                                <xsd:element name="RefAuth" type="xsd:string">
                     <!-- !ELEMENT RefAuth (#PCDATA)> -->
-
-                <!ELEMENT Accep (MessageValid | ContreProp)>
-
-                    <xsd:element name="MessageValid" type="xsd:string">
+                            </xsd:complexType>
+                         </xsd:element>
+                      </xsd:complexType>
+                   </xsd:element>
+                   <xsd:element name="Accep">
+                <!--<!ELEMENT Accep (MessageValid | ContreProp)>-->
+                        <xsd:complexType>
+                            <xsd:choice>
+                                <xsd:element name="MessageValid" type="xsd:string">
+                                <xsd:element name="ContreProp">
+                                    <xsd:complexType>
+                                        <xsd:element name="Prop" type="PropType">
+                                    </xsd:complexType>
+                                </xsd:element>
+                             </xsd:choice>
+                        </xsd:complexType>
                     <!-- !ELEMENT MessageValid (#PCDATA)> -->
                     <!ELEMENT ContreProp (Prop)>
+                    
+                    </xsd:element>
+                    </xsd:choice>
+            </xsd:complexType>
