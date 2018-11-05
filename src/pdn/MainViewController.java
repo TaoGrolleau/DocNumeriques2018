@@ -21,6 +21,10 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        
+        //Utiliser la méthode suivante lorsqu'on ferme définitivement la fenêtre
+        //closeDatabaseConnection();
     }    
     
 }
