@@ -1,17 +1,17 @@
-Finir IHM                                                                   Celine + Sebastien  8/11 (2h)
-Faire une base H2 fonctionnelles                                            Tao                 15/11
-Remplir la base H2 (pour tester)                                            Tao                 15/11
-Faire fonctionner l'affichage avec la base H2 créée                         Sebastien           22/11
-Faire le scruteur de fichier                                                Celine              15/11
-Faire le parseur XML                                                        Maleine             22/11
-Insérer en BDD ce qui a été parsé                                           Tao                 25/11
-Créer un fichier XML bien formé (officiel)                                  Celine              22/11
-Lire les champs de l'IHM et insérer dans le fichier XML                     Celine              22/11
-Créer un fichier xml simple                                                 Maleine             15/11
-Créer un fichier xml complexe                                               Maleine             15/11
-Créer un fichier xml mal formé                                              Maleine             15/11
-Tester notre fichier xml
+Finir IHM                                                                   Celine + Sebastien  8/11 *
+Faire une base H2 fonctionnelles                                            Tao                 15/11 **
+Remplir la base H2 (pour tester)                                            Tao                 15/11 *
+Faire fonctionner l'affichage avec la base H2 créée                         Sebastien           22/11 ***
+Faire le scruteur de fichier                                                Celine              15/11 **
+Faire le parseur XML                                                        Maleine             22/11 ****
+Insérer en BDD ce qui a été parsé                                           Tao                 25/11 *
+Créer un fichier XML bien formé (officiel)                                  Celine              22/11 **
+Lire les champs de l'IHM et insérer dans le fichier XML                     Celine              22/11 **
+Créer un fichier xml simple                                                 Maleine             15/11 *
+Créer un fichier xml complexe                                               Maleine             15/11 *
+Créer un fichier xml mal formé                                              Maleine             15/11 *
+Tester notre fichier xml                                                    Sebastien + Tao + Celine + Maleine 29/11 **
   Tester le fichier avec un autre groupe (option)
 Rapport
-  Structure de fichier                                                      Sebastien + Tao + Celine + Maleine 29/11
-Powerpoint
+  Structure de fichier                                                      Sebastien + Tao + Celine + Maleine 29/11 *
+Powerpoint                                                                      *
