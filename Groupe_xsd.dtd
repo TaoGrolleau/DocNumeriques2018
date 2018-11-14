@@ -14,8 +14,8 @@
         <!-- Les balises liés à l'autorisation sont optionnelle : 2 cas se présentent :
             - si il n'y a pas de numéro d'autorisation, le message sera forcément une demande d'autorisation, sinon le fichier est refusé
             - sinon on lit les différents messages  -->
-        
-                <xsd:element name="FicId" type="xsd:string">
+
+                <xsd:element name="FicID" type="xsd:string">
                 <!-- !ELEMENT FicID (#PCDATA)> *** ID du fichier -->
 
                 <xsd:element name="NmIE" type="xsd:string">
@@ -38,7 +38,7 @@
 
                 <xsd:element name="MailExp" type="xsd:string">
                 <!-- !ELEMENT MailExp (#PCDATA)> -->
-                
+
              </xsd:sequence>
 
 
@@ -52,9 +52,9 @@
                 </xsd:element>
             </xsd:element>
             <!-- NbOfTxs sert de contrôle pour la collection de messages -->
-            
+
                 <xsd:complexType name=MessageType>
-                    
+
                 <!--<!ELEMENT Message (Dte, DureeValideMsg, (Prop|Auth|Dmd|Accep))>-->
                     <xsd:attribute name=MsgId type="xsd:ID">
                 <!--<!ATTLIST Message MsgId ID #REQUIRED>-->
@@ -66,20 +66,20 @@
 
                 <xsd:element name="DureeValideMsg" type = "timeInstant">
                 <!-- !ELEMENT DureeValideMsg (#PCDATA)> -->
-                
+
                 <xsd:choice>
                     <xsd:element name=Prop type="PropType">
                 <!--<!ELEMENT Prop(TitreP, Offre?, Demande?)>-->
                     <xsd:complexType name="PropType">
                     <xsd:element name="TitreP" type="xsd:string">
                     <!-- !ELEMENT TitreP (#PCDATA)> -->
-                    
+
                     <xsd:element name=Offre type="trocType">
                     <!--<!ELEMENT Offre (Objet+)>-->
                     <xsd:element name=Demande typa="trocType">
                     <!--<!ELEMENT Demande (Objet+)>-->
                     </xsd:complexType>
- 
+
                     <xsd:complexType name="trocType">
                     <!--<!ELEMENT Objet (NomObjet, Type, Description)>-->
                     <!-- Type est la catégorie, Description est la description de l'objet du troc-->
@@ -150,7 +150,7 @@
                         </xsd:complexType>
                     <!-- !ELEMENT MessageValid (#PCDATA)> -->
                     <!ELEMENT ContreProp (Prop)>
-                    
+
                     </xsd:element>
                     </xsd:choice>
             </xsd:complexType>
