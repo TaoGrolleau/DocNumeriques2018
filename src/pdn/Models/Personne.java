@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "transaction")
-public class Transaction implements Serializable {
+public class Personne implements Serializable {
     
     @Id
     @Column(name = "numero_authorisation")
