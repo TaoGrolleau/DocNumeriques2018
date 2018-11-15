@@ -1,28 +1,33 @@
 package pdn.Models;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "description")
 public class Description implements Serializable {
 
-    @Id
-    @Column(name = "id_description", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private long idDescription;
-    
-    @Column(name = "nom")
     private String nom;
-    
-    @Column(name = "valeur")
     private String valeur;
     
     public Description(){}
     
+    public long getIdDescription(){
+        return idDescription;
+    }
+    public void setIdDescription(long id){
+        this.idDescription = id;
+    }
+    
+    public String getNom(){
+        return nom;
+    }
+    public void setNom(String nom){
+        this.nom = nom;
+    }
+    
+    public String getValeur(){
+        return valeur;
+    }
+    public void setValeur(String v){
+        this.valeur = v;
+    }
 }
