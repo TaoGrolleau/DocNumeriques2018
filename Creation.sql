@@ -1,6 +1,7 @@
 create table personne (
-    numero_id INT PRIMARY KEY,
+    numero_auto INT PRIMARY KEY,
     date_autorisation VARCHAR(10),
+    nom VARCHAR(20),
     prenom VARCHAR(20),
     email VARCHAR(100)
 );
