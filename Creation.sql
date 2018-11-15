@@ -9,8 +9,9 @@ create table personne (
 
 create table message (
     id_message INT PRIMARY KEY,
-    id_message_parent INT FOREIGN KEY REFERENCES message(id_message), /* Optionnel */
-    statut VARCHAR(20)
+    id_message_parent INT, /* Optionnel */
+    statut VARCHAR(20),
+    FOREIGN KEY (id_message_parent) REFERENCES message(id_message)
 );
 
 create table objet (
@@ -26,36 +27,44 @@ create table description (
 );
 
 create table objet_description (
-    id_objet_ref INT FOREIGN KEY REFERENCES objet(id_objet),
-    id_description_ref INT FOREIGN KEY REFERENCES description(id_description),
-    PRIMARY KEY (id_objet_ref, id_description_ref)
+    id_objet_ref INT,
+    id_description_ref INT,
+    PRIMARY KEY (id_objet_ref, id_description_ref),
+    FOREIGN KEY (id_objet_ref) REFERENCES objet(id_objet),
+    FOREIGN KEY (id_description_ref) REFERENCES description(id_description)
 );
 /* Il faudra aller chercher les descriptions de
 l'objet en se servant de son ID
 (toutes les description de cet objet auront cet ID dans la 1ere colonne) */
 
 create table messages_a_personne (
-    id_personne_ref INT FOREIGN KEY personne(numero_id),
-    id_message_ref INT FOREIGN KEY message(id_message),
-    PRIMARY KEY (id_personne_ref, id_message_ref)
+    id_personne_ref INT,
+    id_message_ref INT,
+    PRIMARY KEY (id_personne_ref, id_message_ref),
+    FOREIGN KEY (id_personne_ref) REFERENCES personne(numero_auto),
+    FOREIGN KEY (id_message_ref) REFERENCES message(id_message)
 );
 /* Il faudra aller chercher les messages d'une
 d'une personne en se servant de son ID
 (tous les messages de cette personne auront cet ID dans la 1ere colonne) */
 
 create table liste_don_objet (
-    id_don_ref INT FOREIGN KEY message(id_message),
-    id_objet_don_ref INT FOREIGN KEY objet(id_objet),
-    PRIMARY KEY (id_don_ref, id_objet_don_ref)
+    id_don_ref INT,
+    id_objet_don_ref INT,
+    PRIMARY KEY (id_don_ref, id_objet_don_ref),
+    FOREIGN KEY (id_don_ref) REFERENCES message(id_message),
+    FOREIGN KEY (id_objet_don_ref) REFERENCES objet(id_objet)
 );
 /* Il faudra aller chercher les objets donnés d'un
 message en se servant de son ID
 (tous les objets de ce message auront cet ID dans la 1ere colonne) */
 
 create table liste_demande_objet (
-    id_demande_ref INT FOREIGN KEY message(id_message),
-    id_objet_demand_ref INT FOREIGN KEY objet(id_objet),
+    id_demande_ref INT,
+    id_objet_demand_ref INT,
     PRIMARY KEY (id_demande_ref, id_objet_demand_ref),
+    FOREIGN KEY (id_demande_ref) REFERENCES message(id_message),
+    FOREIGN KEY (id_objet_demand_ref) REFERENCES objet(id_objet)
 );
 /* Il faudra aller chercher les objets demandés d'un message
 en se servant de son ID
