@@ -1,8 +1,8 @@
-insert into personne values (1, '12/11/2018', 'Pierre', 'pierre.random@domaine.com');
-insert into personne values (2, '25/11/2018', 'Paul', 'paul.random@domaine.com');
-insert into personne values (3, '12/11/2018', 'Jacques', 'jacques.random@domaine.com');
-insert into personne values (4, '01/03/2017', 'Xavier', 'xavier.random@domaine.com');
-insert into personne values (5, '01/03/2017', 'Sylvie', 'sylvie.random@domaine.com');
+insert into personne values (1, '12/11/2018', 'Pierre', 'random', 'pierre.random@domaine.com');
+insert into personne values (2, '25/11/2018', 'Paul', 'random', 'paul.random@domaine.com');
+insert into personne values (3, '12/11/2018', 'Jacques', 'random', 'jacques.random@domaine.com');
+insert into personne values (4, '01/03/2017', 'Xavier', 'random', 'xavier.random@domaine.com');
+insert into personne values (5, '01/03/2017', 'Sylvie', 'random', 'sylvie.random@domaine.com');
 
 insert into objet values (1, 'Gomme', 'Matériel de dessin');
 insert into objet values (2, 'Crayon', 'Matériel de dessin');
