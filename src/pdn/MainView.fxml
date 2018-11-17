@@ -86,12 +86,12 @@
                                                 <Insets left="20.0" right="20.0" />
                                              </GridPane.margin>
                                           </Label>
-                                          <TextField GridPane.rowIndex="2">
+                                          <TextField fx:id="txt_path" GridPane.rowIndex="2">
                                              <GridPane.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </GridPane.margin>
                                           </TextField>
-                                          <Button mnemonicParsing="false" prefHeight="34.0" prefWidth="228.0" text="Valider" GridPane.rowIndex="3">
+                                          <Button fx:id="btn_path" mnemonicParsing="false" prefHeight="34.0" prefWidth="228.0" text="Valider" GridPane.rowIndex="3">
                                              <GridPane.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </GridPane.margin>
