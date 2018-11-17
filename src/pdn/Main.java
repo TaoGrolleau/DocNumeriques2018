@@ -14,12 +14,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     
-    private static final String URL_DATABASE = "jdbc:h2:~database";
-    private static final String LOGIN_H2 = "sa";
-    private static final String PASSWORD_H2 = "sa";
-    
-    private static Connection connection;
-    
     public static void main(String[] args) {
         launch(args);
     }
@@ -34,22 +28,5 @@ public class Main extends Application {
         
         stage.setScene(scene);
         stage.show();
-    }
-    
-    private void instanciateDatabase(){
-        try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection(URL_DATABASE, LOGIN_H2, PASSWORD_H2);
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void closeDatabaseConnection(){
-        try {
-            connection.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }
