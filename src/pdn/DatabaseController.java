@@ -40,7 +40,7 @@ public class DatabaseController {
                 insertData();
             }
         } else {
-            Logger.getLogger(DatabaseController.class.getName()).log(Level.INFO, null, "La BDD existe deja");
+            Logger.getLogger(DatabaseController.class.getName()).log(Level.INFO, "La BDD existe deja");
         }
     }
 
@@ -72,8 +72,8 @@ public class DatabaseController {
             statement.execute("create table personne (" +
             "    numero_auto INT PRIMARY KEY, " +
             "    date_autorisation VARCHAR(10), " +
-            "    nom VARCHAR(20), " +
             "    prenom VARCHAR(20), " +
+            "    nom VARCHAR(20), " +
             "    email VARCHAR(100)" +
             ");");
         } catch (SQLException ex) {
@@ -192,11 +192,11 @@ public class DatabaseController {
         Statement statement;
         try {
             statement = connection.createStatement();
-            statement.execute("insert into personne values (1, '12/11/2018', 'Pierre', 'random', 'pierre.random@domaine.com'); ");
-            statement.execute("insert into personne values (2, '25/11/2018', 'Paul', 'random', 'paul.random@domaine.com'); ");
-            statement.execute("insert into personne values (3, '12/11/2018', 'Jacques', 'random', 'jacques.random@domaine.com'); ");
-            statement.execute("insert into personne values (4, '01/03/2017', 'Xavier', 'random', 'xavier.random@domaine.com'); ");
-            statement.execute("insert into personne values (5, '01/03/2017', 'Sylvie', 'random', 'sylvie.random@domaine.com'); ");
+            statement.execute("insert into personne values (1, '12/11/2018', 'Louis', 'Pasteur', 'louis.pasteur@domaine.com'); ");
+            statement.execute("insert into personne values (2, '25/11/2018', 'Emile', 'Zola', 'emile.zola@domaine.com'); ");
+            statement.execute("insert into personne values (3, '12/11/2018', 'Victor', 'Hugo', 'victor.hugo@domaine.com'); ");
+            statement.execute("insert into personne values (4, '01/03/2017', 'Jean', 'Jores', 'jean.jores@domaine.com'); ");
+            statement.execute("insert into personne values (5, '01/03/2017', 'Marie', 'Curie', 'marie.curie@domaine.com'); ");
             
             statement.execute("insert into objet values (1, 'Gomme', 'Matériel de dessin'); ");
             statement.execute("insert into objet values (2, 'Crayon', 'Matériel de dessin'); ");
