@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
@@ -63,7 +62,7 @@
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="52.0" prefWidth="314.0" text="Contact" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                     <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="52.0" prefWidth="303.0" text="Transactions terminées" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="52.0" prefWidth="399.0" text="Messages" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                    <Label fx:id="messageMainTitle" alignment="CENTER" contentDisplay="CENTER" prefHeight="52.0" prefWidth="399.0" text="Messages" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                     <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                     <GridPane GridPane.rowIndex="1">
@@ -77,7 +76,7 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <ListView prefHeight="200.0" prefWidth="200.0">
+                                          <ListView fx:id="contactListView" prefHeight="200.0" prefWidth="200.0">
                                              <GridPane.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </GridPane.margin>
@@ -87,12 +86,12 @@
                                                 <Insets left="20.0" right="20.0" />
                                              </GridPane.margin>
                                           </Label>
-                                          <TextField GridPane.rowIndex="2">
+                                          <TextField fx:id="txt_path" GridPane.rowIndex="2">
                                              <GridPane.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </GridPane.margin>
                                           </TextField>
-                                          <Button mnemonicParsing="false" prefHeight="34.0" prefWidth="228.0" text="Valider" GridPane.rowIndex="3">
+                                          <Button fx:id="btn_path" mnemonicParsing="false" prefHeight="34.0" prefWidth="228.0" text="Valider" GridPane.rowIndex="3">
                                              <GridPane.margin>
                                                 <Insets left="20.0" right="20.0" />
                                              </GridPane.margin>
@@ -170,16 +169,16 @@
                                       </columnConstraints>
                                       <rowConstraints>
                                         <RowConstraints maxHeight="88.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="186.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="249.0" minHeight="10.0" prefHeight="144.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="88.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="186.0" minHeight="10.0" prefHeight="43.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="249.0" minHeight="10.0" prefHeight="122.0" vgrow="SOMETIMES" />
                                           <RowConstraints maxHeight="248.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="172.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="259.0" minHeight="10.0" prefHeight="88.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="199.0" minHeight="10.0" prefHeight="73.0" vgrow="SOMETIMES" />
-                                          <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="172.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="259.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="199.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <Button mnemonicParsing="false" text="Ajouter proposition" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Proposition:">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
@@ -187,7 +186,7 @@
                                              <GridPane.margin>
                                                 <Insets left="5.0" />
                                              </GridPane.margin></Text>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Je propose:" GridPane.rowIndex="1">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Je propose:" GridPane.rowIndex="2">
                                              <font>
                                                 <Font name="System Bold" size="13.0" />
                                              </font>
@@ -195,41 +194,64 @@
                                                 <Insets left="20.0" />
                                              </GridPane.margin>
                                           </Text>
-                                          <GridPane GridPane.rowIndex="2">
+                                          <GridPane GridPane.rowIndex="3">
                                             <columnConstraints>
                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                             </columnConstraints>
                                             <rowConstraints>
-                                              <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                                              <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                                              <RowConstraints maxHeight="75.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
+                                              <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                                              <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                                              <RowConstraints maxHeight="75.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
                                                 <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
                                                 <TextField text="Nom Objet">
                                                    <GridPane.margin>
-                                                      <Insets left="10.0" right="10.0" />
+                                                      <Insets left="20.0" right="20.0" />
                                                    </GridPane.margin>
                                                 </TextField>
-                                                <TextField text="Description de l'objet" GridPane.rowIndex="2">
-                                                   <GridPane.margin>
-                                                      <Insets left="10.0" right="10.0" />
-                                                   </GridPane.margin>
-                                                </TextField>
-                                                <ComboBox prefWidth="150.0" promptText="Type" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-                                                   <GridPane.margin>
-                                                      <Insets />
-                                                   </GridPane.margin>
-                                                </ComboBox>
                                                 <Button mnemonicParsing="false" text="Ajouter un objet" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                                                <GridPane GridPane.rowIndex="2">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="108.0" minWidth="10.0" prefWidth="108.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="117.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="29.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <children>
+                                                      <TextField text="Ex: taille">
+                                                         <GridPane.margin>
+                                                            <Insets left="5.0" />
+                                                         </GridPane.margin>
+                                                      </TextField>
+                                                      <TextField prefHeight="25.0" prefWidth="91.0" text="Ex: 105x14x50" GridPane.columnIndex="1">
+                                                         <GridPane.margin>
+                                                            <Insets left="5.0" />
+                                                         </GridPane.margin>
+                                                      </TextField>
+                                                      <Button mnemonicParsing="false" text="+" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                                      <TextField text="Ex: taille">
+                                                         <GridPane.margin>
+                                                            <Insets left="5.0" />
+                                                         </GridPane.margin>
+                                                      </TextField>
+                                                   </children>
+                                                </GridPane>
+                                                <TextField text="Type de l'objet" GridPane.rowIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets left="10.0" right="10.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
                                              </children>
                                           </GridPane>
-                                          <ListView prefHeight="83.0" prefWidth="229.0" GridPane.rowIndex="3">
+                                          <ListView prefHeight="83.0" prefWidth="229.0" GridPane.rowIndex="4">
                                              <GridPane.margin>
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </GridPane.margin>
                                           </ListView>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="J'aimerai en échange:" GridPane.rowIndex="4">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="J'aimerai en échange:" GridPane.rowIndex="5">
                                              <GridPane.margin>
                                                 <Insets left="20.0" />
                                              </GridPane.margin>
@@ -237,28 +259,62 @@
                                                 <Font name="System Bold" size="13.0" />
                                              </font>
                                           </Text>
-                                          <GridPane GridPane.rowIndex="5">
+                                          <GridPane GridPane.rowIndex="6">
                                             <columnConstraints>
                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                             </columnConstraints>
                                             <rowConstraints>
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
                                                 <TextField prefHeight="25.0" prefWidth="150.0" text="Nom Objet">
                                                    <GridPane.margin>
-                                                      <Insets left="30.0" right="30.0" />
+                                                      <Insets left="20.0" right="20.0" />
                                                    </GridPane.margin>
                                                 </TextField>
-                                                <Button mnemonicParsing="false" text="Ajouter un objet" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                                <GridPane GridPane.rowIndex="2">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.0" minWidth="10.0" prefWidth="110.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="109.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="35.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <children>
+                                                      <TextField text="Ex: taille">
+                                                         <GridPane.margin>
+                                                            <Insets left="5.0" />
+                                                         </GridPane.margin>
+                                                      </TextField>
+                                                      <TextField prefHeight="25.0" prefWidth="91.0" text="Ex: 105x14x50" GridPane.columnIndex="1">
+                                                         <GridPane.margin>
+                                                            <Insets left="5.0" />
+                                                         </GridPane.margin>
+                                                      </TextField>
+                                                      <Button mnemonicParsing="false" text="+" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                                   </children>
+                                                </GridPane>
+                                                <TextField text="Type de l'objet" GridPane.rowIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets left="20.0" right="20.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
                                              </children>
                                           </GridPane>
-                                          <ListView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
+                                          <ListView prefHeight="28.0" prefWidth="229.0" GridPane.rowIndex="8">
                                              <GridPane.margin>
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </GridPane.margin>
                                           </ListView>
+                                          <Button mnemonicParsing="false" text="Ajouter un objet" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+                                          <TextField text="Titre proposition" GridPane.rowIndex="1">
+                                             <GridPane.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </GridPane.margin>
+                                          </TextField>
                                        </children>
                                     </GridPane>
                                     <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" />
@@ -307,6 +363,7 @@
                                           </Text>
                                        </children>
                                     </GridPane>
+                                    <Button mnemonicParsing="false" text="Ajouter proposition" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>

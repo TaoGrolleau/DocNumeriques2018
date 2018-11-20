@@ -2,6 +2,6 @@ package pdn.dataAccess;
 
 import pdn.DatabaseController;
 
-public class Objet extends DatabaseController {
+public class ObjetDAO extends DatabaseController {
     
 }
