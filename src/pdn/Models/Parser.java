@@ -15,10 +15,10 @@ import org.xml.sax.SAXException;
 
 public class Parser {
     
-    public static void main(String[] args){
+    public Parser(String[] args){
         
         File dtd = new File("../../../Groupe_dtd.dtd");
-        Source xmlFile = new StreamSource(new File("../../../Test/TestSimple.xml"));
+        Source xmlFile = new StreamSource(new File("../../../Test/testSimple.xml"));
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         
         try{
