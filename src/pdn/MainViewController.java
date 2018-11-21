@@ -37,7 +37,7 @@ public class MainViewController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Lance le 
+        // Lance le scrupteur de fichier
         btn_path.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

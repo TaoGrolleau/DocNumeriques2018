@@ -203,6 +203,11 @@ public class DatabaseController {
             statement.execute("insert into objet values (3, 'Table', 'Décoration'); ");
             statement.execute("insert into objet values (4, 'Enceintes', 'Musique'); ");
             statement.execute("insert into objet values (5, 'Vélo', 'Sport'); ");
+            statement.execute("insert into objet values (6, 'Objet 6', 'Matériel de dessin'); ");
+            statement.execute("insert into objet values (7, 'Objet 7', 'Matériel de dessin'); ");
+            statement.execute("insert into objet values (8, 'Objet 8', 'Décoration'); ");
+            statement.execute("insert into objet values (9, 'Objet 9', 'Musique'); ");
+            statement.execute("insert into objet values (10, 'Objet 10', 'Sport'); ");
             
             statement.execute("insert into description values (1, 'Poids', '10g'); ");
             statement.execute("insert into description values (2, 'Taille', '5cm'); ");
@@ -210,10 +215,14 @@ public class DatabaseController {
             statement.execute("insert into description values (4, 'Couleur', 'Vert'); ");
             statement.execute("insert into description values (5, 'Puissance', '50W'); ");
             
-            statement.execute("insert into message values (1, 1, 'en attente'); ");
-            statement.execute("insert into message values (2, 1, 'accepte'); ");
-            statement.execute("insert into message values (3, 2, 'contre propose'); ");
-            statement.execute("insert into message values (4, 3, 'non lu'); ");
+            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (1, null, 1, 2, 'contre_propose'); ");
+            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (2, 1, 5, 2, 'contre_propose'); ");
+            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (3, 2, 5, 3, 'contre_propose'); ");
+            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (4, 3, 5, 4, 'en_attente'); ");
+            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (5, null, 1, 2, 'contre_propose'); ");
+            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (6, 5, 2, 1, 'contre_propose'); ");
+            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (7, 6, 2, 3, 'contre_propose'); ");
+            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (8, 7, 4, 3, 'en_attente'); ");
             
             statement.execute("insert into objet_description values (1, 1); ");
             statement.execute("insert into objet_description values (1, 2); ");
