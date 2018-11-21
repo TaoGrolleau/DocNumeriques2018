@@ -6,6 +6,7 @@
 package pdn.Models;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ import lombok.Data;
  *
  * @author Celine
  */
+
 @Data
 public class ObjetXML {
     String idFichier;
@@ -23,6 +25,8 @@ public class ObjetXML {
     int dureeValidite;
     String mailDestinataire;
     String mailExpediteur;
+    
+    String pathFichier;
     
     List<Integer> messagesId;
     int refMessage;
@@ -41,15 +45,10 @@ public class ObjetXML {
     Date finDemande;
     String titreProposition;
     
-    List<Integer> objetId;
-    String nomObjet;
-    String typeObjet;
-    List<Integer> parametresId;
-    String nomParam;
-    String valeurParam;
+    List<Proposition> propositions;
     
     public ObjetXML(){
-        
+        messagesId = new ArrayList<>();
     }
     
     

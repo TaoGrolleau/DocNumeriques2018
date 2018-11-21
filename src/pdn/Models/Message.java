@@ -1,7 +1,9 @@
 package pdn.Models;
 
 import java.io.Serializable;
+import lombok.ToString;
 
+@ToString
 public class Message implements Serializable {
     
     public static final String STATUT_NON_LU = "non_lu";
@@ -16,6 +18,8 @@ public class Message implements Serializable {
     private String statut;
     
     public Message(){}
+    
+    
     
     public long getIdMessage(){
         return idMessage;
