@@ -15,13 +15,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import pdn.Models.Description;
+import pdn.Models.Message;
 import pdn.Models.Objet;
 import pdn.Models.ObjetXML;
+import pdn.Models.Personne;
 import pdn.Models.Proposition;
+import pdn.dataAccess.MessageDAO;
 import pdn.dataAccess.PersonneDAO;
 
 public class MainViewController implements Initializable {
@@ -78,6 +82,12 @@ public class MainViewController implements Initializable {
     @FXML
     private ListView contactListView;
     @FXML
+    private ListView transactionListView;
+    @FXML
+    private ListView messageListView;
+    @FXML
+    private ListView contacts;
+    @FXML
     private ListView list_objetProposed;
     @FXML
     private ListView list_objetAsked;
@@ -88,6 +98,8 @@ public class MainViewController implements Initializable {
     private Label messageMainTitle;
 
     ListProperty<String> contactListProperty = new SimpleListProperty<>();
+    ListProperty<String> messageListProperty = new SimpleListProperty<>();
+    ListProperty<String> transactionListProperty = new SimpleListProperty<>();
 
     List<Description> listParameterObjetProposed = new ArrayList<>();
     List<Description> listParameterObjetAsked = new ArrayList<>();
@@ -247,17 +259,42 @@ public class MainViewController implements Initializable {
             }
         });
 
-        List<String> contacts = new ArrayList<>();
+        List<String> contactsList = new ArrayList<>();
         PersonneDAO.getAllPersonne()
                 .forEach(personne -> {
-                    contacts.add(personne.getPrenom() + " " + personne.getNom());
+                    contactsList.add(personne.getPrenom() + " " + personne.getNom());
                 });
-        contactListProperty.set(FXCollections.observableArrayList(contacts));
+        //MessageDAO.getAllMessageForPersonneId()
+        contactListProperty.set(FXCollections.observableArrayList(contactsList));
+        contacts.itemsProperty().bind(contactListProperty);
         contactListView.itemsProperty().bind(contactListProperty);
         contactListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 messageMainTitle.setText(newValue);
+                Personne personneSelected = PersonneDAO.getPersonneWithName(newValue);
+                List<Message> messages = MessageDAO.getAllMessageForPersonne(personneSelected.getNumeroAuthoristion());
+                List<String> messageList = new ArrayList<>();
+                messages.forEach(m -> {
+                    String format = m.getStatut();
+                    messageList.add(format);
+                });
+                messageListProperty.set(FXCollections.observableArrayList(messageList));
+                messageListView.itemsProperty().bind(messageListProperty);
+                
+                List<Message> transactions = messages;
+                transactions.forEach(t -> {
+                   if(!t.getStatut().equalsIgnoreCase("accepte") /*&&  il n'y a pas d'objet*/){
+                       transactions.remove(t);
+                   }
+                });
+                List<String> transactionList = new ArrayList<>();
+                transactions.forEach(m -> {
+                    String format = m.getStatut();
+                    transactionList.add(format);
+                });
+                transactionListProperty.set(FXCollections.observableArrayList(transactionList));
+                transactionListView.itemsProperty().bind(transactionListProperty);
             }
         });
 

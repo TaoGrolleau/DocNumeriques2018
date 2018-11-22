@@ -189,6 +189,17 @@ public class DatabaseController {
     }
 
     private void insertData() {
+        insertPersonne();
+        insertObjet();
+        insertDescription();
+        insertMessage();
+        insertObjetDescription();
+        insertMessageAPersonne();
+        insertDonObjet();
+        insertDemandeObjet();
+    }
+
+    private void insertPersonne() {
         Statement statement;
         try {
             statement = connection.createStatement();
@@ -197,7 +208,15 @@ public class DatabaseController {
             statement.execute("insert into personne values (3, '12/11/2018', 'Victor', 'Hugo', 'victor.hugo@domaine.com'); ");
             statement.execute("insert into personne values (4, '01/03/2017', 'Jean', 'Jores', 'jean.jores@domaine.com'); ");
             statement.execute("insert into personne values (5, '01/03/2017', 'Marie', 'Curie', 'marie.curie@domaine.com'); ");
-            
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseController.class.getName()).log(Level.SEVERE, "Impossible d'inserer des personnes", ex);
+        }
+    }
+    
+    private void insertObjet() {
+        Statement statement;
+        try {
+            statement = connection.createStatement();
             statement.execute("insert into objet values (1, 'Gomme', 'Matériel de dessin'); ");
             statement.execute("insert into objet values (2, 'Crayon', 'Matériel de dessin'); ");
             statement.execute("insert into objet values (3, 'Table', 'Décoration'); ");
@@ -208,22 +227,50 @@ public class DatabaseController {
             statement.execute("insert into objet values (8, 'Objet 8', 'Décoration'); ");
             statement.execute("insert into objet values (9, 'Objet 9', 'Musique'); ");
             statement.execute("insert into objet values (10, 'Objet 10', 'Sport'); ");
-            
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseController.class.getName()).log(Level.SEVERE, "Impossible d'inserer des objets", ex);
+        }
+    }
+    
+    private void insertDescription() {
+        Statement statement;
+        try {
+            statement = connection.createStatement();
             statement.execute("insert into description values (1, 'Poids', '10g'); ");
             statement.execute("insert into description values (2, 'Taille', '5cm'); ");
             statement.execute("insert into description values (3, 'Longueur', '2m'); ");
             statement.execute("insert into description values (4, 'Couleur', 'Vert'); ");
             statement.execute("insert into description values (5, 'Puissance', '50W'); ");
-            
-            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (1, null, 1, 2, 'contre_propose'); ");
-            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (2, 1, 5, 2, 'contre_propose'); ");
-            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (3, 2, 5, 3, 'contre_propose'); ");
-            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (4, 3, 5, 4, 'en_attente'); ");
-            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (5, null, 1, 2, 'contre_propose'); ");
-            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (6, 5, 2, 1, 'contre_propose'); ");
-            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (7, 6, 2, 3, 'contre_propose'); ");
-            statement.execute("insert into message (idMessage, idMessageParent, objetDemande, objetDonne, statut) values (8, 7, 4, 3, 'en_attente'); ");
-            
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseController.class.getName()).log(Level.SEVERE, "Impossible d'inserer des descriptions", ex);
+        }
+    }
+
+    private void insertMessage() {
+        Statement statement;
+        try {
+            statement = connection.createStatement();
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (1, null, 'accepte'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (2, 1, 'contre_propose'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (3, 2, 'contre_propose'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (4, 3, 'non_lu'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (5, null, 'accepte'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (6, 5, 'accepte'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (7, 6, 'accepte'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (8, 7, 'non_lu'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (9, null, 'non_lu'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (10, null, 'accepte'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (11, 10, 'accepte'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut) values (12, 11, 'accepte'); ");
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseController.class.getName()).log(Level.SEVERE, "Impossible d'inserer des messages", ex);
+        }
+    }
+    
+    private void insertObjetDescription() {
+        Statement statement;
+        try {
+            statement = connection.createStatement();
             statement.execute("insert into objet_description values (1, 1); ");
             statement.execute("insert into objet_description values (1, 2); ");
             statement.execute("insert into objet_description values (1, 3); ");
@@ -231,21 +278,71 @@ public class DatabaseController {
             statement.execute("insert into objet_description values (3, 3); ");
             statement.execute("insert into objet_description values (4, 5); ");
             statement.execute("insert into objet_description values (5, 4); ");
-            
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseController.class.getName()).log(Level.SEVERE, "Impossible d'inserer des messages", ex);
+        }
+    }
+    
+    private void insertMessageAPersonne() {
+        Statement statement;
+        try {
+            statement = connection.createStatement();
+            statement.execute("insert into messages_a_personne values (1, 1); ");
             statement.execute("insert into messages_a_personne values (1, 2); ");
             statement.execute("insert into messages_a_personne values (1, 3); ");
-            statement.execute("insert into messages_a_personne values (2, 1); ");
-            statement.execute("insert into messages_a_personne values (3, 4); ");
-            
-            statement.execute("insert into liste_don_objet values (2, 1); ");
-            statement.execute("insert into liste_don_objet values (2, 2); ");
-            statement.execute("insert into liste_don_objet values (3, 5); ");
-            
-            statement.execute("insert into liste_demande_objet values (2, 3); ");
-            statement.execute("insert into liste_demande_objet values (2, 4); ");
-            statement.execute("insert into liste_demande_objet values (3, 4);");
+            statement.execute("insert into messages_a_personne values (1, 4); ");
+            statement.execute("insert into messages_a_personne values (2, 5); ");
+            statement.execute("insert into messages_a_personne values (2, 6); ");
+            statement.execute("insert into messages_a_personne values (2, 7); ");
+            statement.execute("insert into messages_a_personne values (2, 8); ");
+            statement.execute("insert into messages_a_personne values (3, 9); ");
+            statement.execute("insert into messages_a_personne values (4, 10); ");
+            statement.execute("insert into messages_a_personne values (4, 11); ");
+            statement.execute("insert into messages_a_personne values (4, 12); ");
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseController.class.getName()).log(Level.SEVERE, null, "Impossible d'inserer des donnees :" + ex);
+            Logger.getLogger(DatabaseController.class.getName()).log(Level.SEVERE, "Impossible d'inserer des messages_a_personne", ex);
+        }
+    }
+    
+    private void insertDonObjet() {
+        Statement statement;
+        try {
+            statement = connection.createStatement();
+            statement.execute("insert into liste_don_objet values (1, null); ");
+            statement.execute("insert into liste_don_objet values (2, 5); ");
+            statement.execute("insert into liste_don_objet values (3, 5); ");
+            statement.execute("insert into liste_don_objet values (4, 5); ");
+            statement.execute("insert into liste_don_objet values (5, null); ");
+            statement.execute("insert into liste_don_objet values (6, 2); ");
+            statement.execute("insert into liste_don_objet values (7, 2); ");
+            statement.execute("insert into liste_don_objet values (8, 4); ");
+            statement.execute("insert into liste_don_objet values (9, null); ");
+            statement.execute("insert into liste_don_objet values (10, null); ");
+            statement.execute("insert into liste_don_objet values (11, 6); ");
+            statement.execute("insert into liste_don_objet values (12, 7); ");
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseController.class.getName()).log(Level.SEVERE, "Impossible d'inserer des dons d'objets", ex);
+        }
+    }
+    
+    private void insertDemandeObjet() {
+        Statement statement;
+        try {
+            statement = connection.createStatement();
+            statement.execute("insert into liste_demande_objet values (1, null); ");
+            statement.execute("insert into liste_demande_objet values (2, 2); ");
+            statement.execute("insert into liste_demande_objet values (3, 3);");
+            statement.execute("insert into liste_demande_objet values (4, 4);");
+            statement.execute("insert into liste_demande_objet values (5, null);");
+            statement.execute("insert into liste_demande_objet values (6, 1);");
+            statement.execute("insert into liste_demande_objet values (7, 3);");
+            statement.execute("insert into liste_demande_objet values (8, 3);");
+            statement.execute("insert into liste_demande_objet values (9, null);");
+            statement.execute("insert into liste_demande_objet values (10, null);");
+            statement.execute("insert into liste_demande_objet values (11, 1);");
+            statement.execute("insert into liste_demande_objet values (12, 8);");
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseController.class.getName()).log(Level.SEVERE, "Impossible d'inserer des demandes d'objets", ex);
         }
     }
 }
