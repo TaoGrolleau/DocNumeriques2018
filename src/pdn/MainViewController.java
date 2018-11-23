@@ -25,7 +25,9 @@ import pdn.Models.Objet;
 import pdn.Models.ObjetXML;
 import pdn.Models.Personne;
 import pdn.Models.Proposition;
+import pdn.dataAccess.DescriptionDAO;
 import pdn.dataAccess.MessageDAO;
+import pdn.dataAccess.ObjetDAO;
 import pdn.dataAccess.PersonneDAO;
 
 public class MainViewController implements Initializable {
@@ -264,7 +266,6 @@ public class MainViewController implements Initializable {
                 .forEach(personne -> {
                     contactsList.add(personne.getPrenom() + " " + personne.getNom());
                 });
-        //MessageDAO.getAllMessageForPersonneId()
         contactListProperty.set(FXCollections.observableArrayList(contactsList));
         contacts.itemsProperty().bind(contactListProperty);
         contactListView.itemsProperty().bind(contactListProperty);
@@ -276,22 +277,73 @@ public class MainViewController implements Initializable {
                 List<Message> messages = MessageDAO.getAllMessageForPersonne(personneSelected.getNumeroAuthoristion());
                 List<String> messageList = new ArrayList<>();
                 messages.forEach(m -> {
-                    String format = m.getStatut();
-                    messageList.add(format);
+                    Boolean noDemande = true;
+                    Boolean noDon = true;
+                    StringBuilder format = new StringBuilder();
+                    m.setObjetDemande(ObjetDAO.getObjetDemandeForMessage(m.getIdMessage()));
+                    if(m.getObjetDemande() != null){
+                        if(m.getObjetDemande().getNom() != null){
+                            noDemande = false;
+                            m.getObjetDemande().setDescriptions(DescriptionDAO.getAllDescriptionForObjetId(m.getObjetDemande().getIdObjet()));
+                            format.append("Demande : ")
+                                    .append(m.getObjetDemande().getNom())
+                                    .append(" - ")
+                                    .append(m.getObjetDemande().getType());
+                            m.getObjetDemande().getDescriptions().forEach(d -> {
+                                format.append(" - ")
+                                        .append(d.toString());
+                            });
+                        }
+                    }
+                    m.setObjetDonne(ObjetDAO.getObjetDonForMessage(m.getIdMessage()));
+                    if(m.getObjetDonne() != null){
+                        if(m.getObjetDonne().getNom() != null){
+                            noDon = false;
+                            m.getObjetDonne().setDescriptions(DescriptionDAO.getAllDescriptionForObjetId(m.getObjetDonne().getIdObjet()));
+                            format.append(" / Don : ")
+                                    .append(m.getObjetDonne().getNom())
+                                    .append(" - ")
+                                    .append(m.getObjetDonne().getType());
+                            m.getObjetDonne().getDescriptions().forEach(d -> {
+                                format.append(" - ")
+                                        .append(d.toString());
+                            });
+                        }
+                    }
+                    if(noDemande && noDon){
+                        format.append("Demande d'authorisation");
+                    }
+                    messageList.add(format.toString());
                 });
                 messageListProperty.set(FXCollections.observableArrayList(messageList));
                 messageListView.itemsProperty().bind(messageListProperty);
                 
                 List<Message> transactions = messages;
-                transactions.forEach(t -> {
-                   if(!t.getStatut().equalsIgnoreCase("accepte") /*&&  il n'y a pas d'objet*/){
-                       transactions.remove(t);
-                   }
-                });
                 List<String> transactionList = new ArrayList<>();
-                transactions.forEach(m -> {
-                    String format = m.getStatut();
-                    transactionList.add(format);
+                transactions.forEach(t -> {
+                    Boolean noDemande = true;
+                    Boolean noDon = true;
+                    StringBuilder format = new StringBuilder();
+                    if(t.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)){
+                        if(t.getObjetDemande() != null){
+                            if(t.getObjetDemande().getNom() != null){
+                                noDemande = false;
+                                format.append("Demande : ")
+                                        .append(t.getObjetDemande().getNom());
+                            }
+                        }
+                        t.setObjetDonne(ObjetDAO.getObjetDonForMessage(t.getIdMessage()));
+                        if(t.getObjetDonne() != null){
+                            if(t.getObjetDonne().getNom() != null){
+                                noDon = false;
+                                format.append(" / Don : ")
+                                        .append(t.getObjetDonne().getNom());
+                            }
+                        }
+                        if(!noDemande || !noDon){
+                            transactionList.add(format.toString());
+                        }
+                    }
                 });
                 transactionListProperty.set(FXCollections.observableArrayList(transactionList));
                 transactionListView.itemsProperty().bind(transactionListProperty);
