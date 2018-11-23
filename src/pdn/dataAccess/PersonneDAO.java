@@ -29,8 +29,30 @@ public class PersonneDAO extends DatabaseController{
                 personnes.add(personne);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, "getAllPersonne error", ex);
         }
         return personnes;
+    }
+
+    public static Personne getPersonneWithName(String newValue) {
+        Personne personne = new Personne();
+        String[] nomComplet = newValue.split(" ");
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * from personne " + 
+                    "WHERE prenom LIKE '%" + nomComplet[0] + 
+                    "' AND nom LIKE '%" + nomComplet[1] + "';");
+            while (rs.next()) {
+                
+                personne.setNumeroAuthorisation(rs.getInt("numero_auto"));
+                personne.setDate(rs.getString("date_autorisation"));
+                personne.setNom(rs.getString("nom"));
+                personne.setPrenom(rs.getString("prenom"));
+                personne.setEmail(rs.getString("email"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, "getPersonneWithName error", ex);
+        }
+        return personne;
     }
 }
