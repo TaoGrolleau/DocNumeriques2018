@@ -53,7 +53,7 @@ public class Parser {
             fichier.setRefMessage(Integer.parseInt(dernierMessage.getAttributes().getNamedItem("ReponseA").getTextContent()));
             fichier.setDateMessage((Date) new SimpleDateFormat("dd/MM/yyyy").parse(dernierMessage.getElementsByTagName("Dte").item(0).getTextContent()));
             fichier.setDureeValiditeMessage(Integer.parseInt(dernierMessage.getElementsByTagName("DureeValidMsg").item(0).getTextContent()));
-            Element type;
+            Element type;//faire un for pour tout les messages, pas seulement le dernier
             if (dernierMessage.getElementsByTagName("Prop").item(0) != null) {
                 fichier.setTypeMessage("Prop");
                 type = (Element) dernierMessage.getElementsByTagName("Prop").item(0);
@@ -64,7 +64,7 @@ public class Parser {
                 Element objet;
                 ArrayList<Description> descriptions;
                 Description description;
-                NodeList parametres;
+                NodeList parametres;// finir de traiter un message
                 for (int i = 0; i < offre.getLength(); i++) {
                     objet = (Element) offre.item(i);
                     o.setNom(objet.getElementsByTagName("NomObjet").item(0).getTextContent());
