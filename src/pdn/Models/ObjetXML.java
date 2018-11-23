@@ -4,18 +4,16 @@
  * and open the template in the editor.
  */
 package pdn.Models;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import lombok.Data;
-
-/**
- *
- * @author Celine
- */
 
 @Data
 public class ObjetXML {
+
     String idFichier;
     String nomEm;
     String nomRecepteur;
@@ -24,34 +22,32 @@ public class ObjetXML {
     int dureeValidite;
     String mailDestinataire;
     String mailExpediteur;
-    
+
     String pathFichier;
-    
-    ArrayList<Integer> messagesId;
-    int refMessage;
-    Date dateMessage;
-    int dureeValiditeMessage;
-    String typeMessage;
-    
+
+    List<Message> messages;
+
+    public ObjetXML() {
+        messages = new ArrayList<>();
+        this.setIdFichier(String.valueOf(Math.random()));
         
-    String AcceptAuthorisation;
-    String RefAuthorisation;
-  
-    String MessageReponse;
-    
-    String descriptionDemande;
-    Date debutDemande;
-    Date finDemande;
-    String titreProposition;
-    
-    List<Proposition> propositions;
-    
-    public ObjetXML(){
-        messagesId = new ArrayList<>();
     }
- 
+
     public static void CreateXmlFile(ObjetXML message) {
-        
+
     }
-    
+
+    public static void CreateXmlHeader(ObjetXML message) {
+        
+        String header = "";
+    }
+
+    public static void CreateXmlMessage(ObjetXML message) {
+
+    }
+
+    public static void CreateXmlProp(ObjetXML message) {
+
+    }
+
 }

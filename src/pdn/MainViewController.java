@@ -113,7 +113,7 @@ public class MainViewController implements Initializable {
     List<Objet> listObjetProposed = new ArrayList<>();
     List<Objet> listObjetAsked = new ArrayList<>();
 
-    List<Proposition> propositions = new ArrayList<>();
+    List<Message> messages = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -211,20 +211,27 @@ public class MainViewController implements Initializable {
         btn_addProposition.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Proposition newproposition = new Proposition();
+                Message newMessage = new Message();
 
                 List<Objet> objectsProposed = new ArrayList<>();
                 objectsProposed.addAll(listObjetProposed);
                 List<Objet> objectsAsked = new ArrayList<>();
                 objectsAsked.addAll(listObjetAsked);
 
-                newproposition.setObjetsProposed(objectsProposed);
-                newproposition.setObjetsAsked(objectsAsked);
+                String typeMessage = radiobtn_typeMessage.getSelectedToggle().toString();
 
-                propositions.add(newproposition);
+                String field_titleProposition = titleProposition.getText();
+
+                newMessage.setObjetsProposed(objectsProposed);
+                newMessage.setObjetsAsked(objectsAsked);
+                
+                newMessage.setTypeMessage(typeMessage);
+                newMessage.setTitreProposition(field_titleProposition);
+
+                messages.add(newMessage);
                 listObjetProposed.clear();
                 listObjetAsked.clear();
-                System.out.println(propositions.toString());
+                System.out.println(messages.toString());
             }
         });
 
@@ -232,9 +239,9 @@ public class MainViewController implements Initializable {
         btn_createFile.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                ObjetXML message = new ObjetXML();
-                List<Proposition> finalProposition = new ArrayList<>();
-                finalProposition.addAll(propositions);
+                ObjetXML objetXml = new ObjetXML();
+                List<Message> finalMessages = new ArrayList<>();
+                finalMessages.addAll(messages);
 
                 String field_pathFile = pathMessageCreated.getText();
 
@@ -243,25 +250,18 @@ public class MainViewController implements Initializable {
                 String field_nameContact = nameContact.getText();
                 String field_mailContact = emailContact.getText();
 
-                String typeMessage = radiobtn_typeMessage.getSelectedToggle().toString();
+                objetXml.setPathFichier(field_pathFile);
 
-                String field_titleProposition = titleProposition.getText();
+                objetXml.setNomEm(field_nameSender);
+                objetXml.setMailExpediteur(field_mailSender);
+                objetXml.setNomRecepteur(field_nameContact);
+                objetXml.setMailDestinataire(field_mailContact);
 
-                message.setPathFichier(field_pathFile);
+                objetXml.setMessages(finalMessages);
+                objetXml.CreateXmlFile(objetXml);
+                messages.clear();
 
-                message.setNomEm(field_nameSender);
-                message.setMailExpediteur(field_mailSender);
-                message.setNomRecepteur(field_nameContact);
-                message.setMailDestinataire(field_mailContact);
-
-                message.setTypeMessage(typeMessage);
-
-                message.setTitreProposition(field_titleProposition);
-                message.setPropositions(finalProposition);
-                message.CreateXmlFile(message);
-                propositions.clear();
-
-                System.out.println(message.toString());
+                System.out.println(objetXml.toString());
             }
         });
 
