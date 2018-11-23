@@ -366,10 +366,41 @@ public class MainViewController implements Initializable {
                     @Override
                     public void handle(MouseEvent event) {
                         lastMessage.setStatut(Message.STATUT_ACCEPTE);
-                        System.out.println("messg accepte = " + lastMessage.getIdMessage());
                         MessageDAO.update(lastMessage);
-                        changeStateOfButtons(lastMessage);//messageListView.refresh();
+                        changeStateOfButtons(lastMessage);
+                        refreshTransactionList();
                         // appeler ma méthode de création du fichier XML
+                    }
+
+                    private void refreshTransactionList() {
+                        List<Message> transactions = messages;
+                        List<String> transactionList = new ArrayList<>();
+                        transactions.forEach(t -> {
+                            Boolean noDemande = true;
+                            Boolean noDon = true;
+                            StringBuilder format = new StringBuilder();
+                            if (t.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)) {
+                                if (!t.getObjetsAsked().isEmpty()) {
+                                    noDemande = false;
+                                    t.getObjetsAsked().forEach(o -> {
+                                        format.append("Demande : ")
+                                                .append(o.getNom());
+                                    });
+                                }
+                                if (!t.getObjetsProposed().isEmpty()) {
+                                    noDon = false;
+                                    t.getObjetsProposed().forEach(o -> {
+                                        format.append(" / Don : ")
+                                                .append(o.getNom());
+                                    });
+                                }
+                                if (!noDemande || !noDon) {
+                                    transactionList.add(format.toString());
+                                }
+                            }
+                        });
+                        transactionListProperty.set(FXCollections.observableArrayList(transactionList));
+                        transactionListView.itemsProperty().bind(transactionListProperty);
                     }
                 });
                 
@@ -377,9 +408,8 @@ public class MainViewController implements Initializable {
                     @Override
                     public void handle(MouseEvent event) {
                         lastMessage.setStatut(Message.STATUT_CONTRE_PROPOSE);
-                        System.out.println("messg contre = " + lastMessage.getIdMessage());
                         MessageDAO.update(lastMessage);
-                        changeStateOfButtons(lastMessage);//messageListView.refresh();
+                        changeStateOfButtons(lastMessage);
                         // appeler ma méthode de création du fichier XML
                     }
                 });
@@ -388,9 +418,8 @@ public class MainViewController implements Initializable {
                     @Override
                     public void handle(MouseEvent event) {
                         lastMessage.setStatut(Message.STATUT_EN_ATTENTE);
-                        System.out.println("messg lu = " + lastMessage.getIdMessage());
                         MessageDAO.update(lastMessage);
-                        changeStateOfButtons(lastMessage);//messageListView.refresh();
+                        changeStateOfButtons(lastMessage);
                     }
                 });
             }
