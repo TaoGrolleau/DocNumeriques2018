@@ -118,7 +118,27 @@
                                                 <Insets left="20.0" right="20.0" />
                                              </GridPane.margin>
                                           </ListView>
-                                          <Button fx:id="btn_answerMessage" mnemonicParsing="false" text="Accepter" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                                          <GridPane GridPane.rowIndex="1">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                             <children>
+                                                <Button fx:id="btn_answerMessage" mnemonicParsing="false" text="Accepter" GridPane.halignment="RIGHT">
+                                                   <GridPane.margin>
+                                                      <Insets right="20.0" />
+                                                   </GridPane.margin>
+                                                </Button>
+                                                <Button fx:id="btn_CounterProposalMessage" mnemonicParsing="false" text="Contre proposition" GridPane.columnIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets left="20.0" />
+                                                   </GridPane.margin>
+                                                </Button>
+                                             </children>
+                                          </GridPane>
                                        </children>
                                     </GridPane>
                                  </children>

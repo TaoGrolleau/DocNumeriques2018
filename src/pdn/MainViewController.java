@@ -79,6 +79,8 @@ public class MainViewController implements Initializable {
     private Button btn_createFile;
     @FXML
     private Button btn_answerMessage;
+    @FXML
+    private Button btn_CounterProposalMessage;
 
     @FXML
     private ToggleGroup radiobtn_typeMessage;
