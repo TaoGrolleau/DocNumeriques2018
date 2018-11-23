@@ -20,7 +20,7 @@ public class ObjetXML {
     String idFichier;
     String nomEm;
     String nomRecepteur;
-    int numAuthorisation;
+    String numAuthorisation;
     Date signatureAuthorisation;
     int dureeValidite;
     String mailDestinataire;
@@ -28,7 +28,7 @@ public class ObjetXML {
     
     String pathFichier;
     
-    List<Integer> messagesId;
+    ArrayList<Integer> messagesId;
     int refMessage;
     Date dateMessage;
     int dureeValiditeMessage;
