@@ -77,6 +77,8 @@ public class MainViewController implements Initializable {
     private Button btn_addProposition;
     @FXML
     private Button btn_createFile;
+    @FXML
+    private Button btn_answerMessage;
 
     @FXML
     private ToggleGroup radiobtn_typeMessage;
@@ -254,7 +256,7 @@ public class MainViewController implements Initializable {
 
                 message.setTitreProposition(field_titleProposition);
                 message.setPropositions(finalProposition);
-
+                message.CreateXmlFile(message);
                 propositions.clear();
 
                 System.out.println(message.toString());
@@ -281,8 +283,8 @@ public class MainViewController implements Initializable {
                     Boolean noDon = true;
                     StringBuilder format = new StringBuilder();
                     m.setObjetDemande(ObjetDAO.getObjetDemandeForMessage(m.getIdMessage()));
-                    if(m.getObjetDemande() != null){
-                        if(m.getObjetDemande().getNom() != null){
+                    if (m.getObjetDemande() != null) {
+                        if (m.getObjetDemande().getNom() != null) {
                             noDemande = false;
                             m.getObjetDemande().setDescriptions(DescriptionDAO.getAllDescriptionForObjetId(m.getObjetDemande().getIdObjet()));
                             format.append("Demande : ")
@@ -296,8 +298,8 @@ public class MainViewController implements Initializable {
                         }
                     }
                     m.setObjetDonne(ObjetDAO.getObjetDonForMessage(m.getIdMessage()));
-                    if(m.getObjetDonne() != null){
-                        if(m.getObjetDonne().getNom() != null){
+                    if (m.getObjetDonne() != null) {
+                        if (m.getObjetDonne().getNom() != null) {
                             noDon = false;
                             m.getObjetDonne().setDescriptions(DescriptionDAO.getAllDescriptionForObjetId(m.getObjetDonne().getIdObjet()));
                             format.append(" / Don : ")
@@ -310,37 +312,37 @@ public class MainViewController implements Initializable {
                             });
                         }
                     }
-                    if(noDemande && noDon){
+                    if (noDemande && noDon) {
                         format.append("Demande d'authorisation");
                     }
                     messageList.add(format.toString());
                 });
                 messageListProperty.set(FXCollections.observableArrayList(messageList));
                 messageListView.itemsProperty().bind(messageListProperty);
-                
+
                 List<Message> transactions = messages;
                 List<String> transactionList = new ArrayList<>();
                 transactions.forEach(t -> {
                     Boolean noDemande = true;
                     Boolean noDon = true;
                     StringBuilder format = new StringBuilder();
-                    if(t.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)){
-                        if(t.getObjetDemande() != null){
-                            if(t.getObjetDemande().getNom() != null){
+                    if (t.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)) {
+                        if (t.getObjetDemande() != null) {
+                            if (t.getObjetDemande().getNom() != null) {
                                 noDemande = false;
                                 format.append("Demande : ")
                                         .append(t.getObjetDemande().getNom());
                             }
                         }
                         t.setObjetDonne(ObjetDAO.getObjetDonForMessage(t.getIdMessage()));
-                        if(t.getObjetDonne() != null){
-                            if(t.getObjetDonne().getNom() != null){
+                        if (t.getObjetDonne() != null) {
+                            if (t.getObjetDonne().getNom() != null) {
                                 noDon = false;
                                 format.append(" / Don : ")
                                         .append(t.getObjetDonne().getNom());
                             }
                         }
-                        if(!noDemande || !noDon){
+                        if (!noDemande || !noDon) {
                             transactionList.add(format.toString());
                         }
                     }

@@ -5,6 +5,8 @@
  */
 package pdn.Models;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,13 @@ public class ObjetXML {
     public ObjetXML(){
         messagesId = new ArrayList<>();
     }
-    
+ 
+    public static void CreateXmlFile(ObjetXML message) {
+        XStream xstream = new XStream(new DomDriver());
+        
+        String xml = xstream.toXML(message);
+        
+        System.out.println(xml);
+    }
     
 }
