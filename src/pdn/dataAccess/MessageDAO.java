@@ -1,5 +1,6 @@
 package pdn.dataAccess;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -34,6 +35,18 @@ public class MessageDAO extends DatabaseController{
             Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, "getAllMessageForPersonne error", ex);
         }
         return messages;
+    }
+    
+     public static void update(Message m) {
+        String sql = "UPDATE message SET statut = ? ; ";
+ 
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+ 
+            pstmt.setString(1, m.getStatut());
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, "update error", ex);
+        }
     }
     
 }

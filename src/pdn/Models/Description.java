@@ -11,5 +11,10 @@ public class Description implements Serializable {
     private String valeur;
     
     public Description(){}
+    
+    @Override
+    public String toString(){
+        return this.nom + " " + this.valeur;
+    }
 
 }

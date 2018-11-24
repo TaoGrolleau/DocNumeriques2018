@@ -15,7 +15,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
@@ -24,8 +23,9 @@ import pdn.Models.Message;
 import pdn.Models.Objet;
 import pdn.Models.ObjetXML;
 import pdn.Models.Personne;
-import pdn.Models.Proposition;
+import pdn.dataAccess.DescriptionDAO;
 import pdn.dataAccess.MessageDAO;
+import pdn.dataAccess.ObjetDAO;
 import pdn.dataAccess.PersonneDAO;
 
 public class MainViewController implements Initializable {
@@ -75,6 +75,12 @@ public class MainViewController implements Initializable {
     private Button btn_addProposition;
     @FXML
     private Button btn_createFile;
+    @FXML
+    private Button btn_answerMessage;
+    @FXML
+    private Button btn_CounterProposalMessage;
+    @FXML
+    private Button btn_markRead;
 
     @FXML
     private ToggleGroup radiobtn_typeMessage;
@@ -107,7 +113,7 @@ public class MainViewController implements Initializable {
     List<Objet> listObjetProposed = new ArrayList<>();
     List<Objet> listObjetAsked = new ArrayList<>();
 
-    List<Proposition> propositions = new ArrayList<>();
+    List<Message> messages = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -205,20 +211,27 @@ public class MainViewController implements Initializable {
         btn_addProposition.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Proposition newproposition = new Proposition();
+                Message newMessage = new Message();
 
                 List<Objet> objectsProposed = new ArrayList<>();
                 objectsProposed.addAll(listObjetProposed);
                 List<Objet> objectsAsked = new ArrayList<>();
                 objectsAsked.addAll(listObjetAsked);
 
-                newproposition.setObjetsProposed(objectsProposed);
-                newproposition.setObjetsAsked(objectsAsked);
+                String typeMessage = radiobtn_typeMessage.getSelectedToggle().toString();
 
-                propositions.add(newproposition);
+                String field_titleProposition = titleProposition.getText();
+
+                newMessage.setObjetsProposed(objectsProposed);
+                newMessage.setObjetsAsked(objectsAsked);
+                
+                newMessage.setTypeMessage(typeMessage);
+                newMessage.setTitreProposition(field_titleProposition);
+
+                messages.add(newMessage);
                 listObjetProposed.clear();
                 listObjetAsked.clear();
-                System.out.println(propositions.toString());
+                System.out.println(messages.toString());
             }
         });
 
@@ -226,9 +239,9 @@ public class MainViewController implements Initializable {
         btn_createFile.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                ObjetXML message = new ObjetXML();
-                List<Proposition> finalProposition = new ArrayList<>();
-                finalProposition.addAll(propositions);
+                ObjetXML objetXml = new ObjetXML();
+                List<Message> finalMessages = new ArrayList<>();
+                finalMessages.addAll(messages);
 
                 String field_pathFile = pathMessageCreated.getText();
 
@@ -237,25 +250,18 @@ public class MainViewController implements Initializable {
                 String field_nameContact = nameContact.getText();
                 String field_mailContact = emailContact.getText();
 
-                String typeMessage = radiobtn_typeMessage.getSelectedToggle().toString();
+                objetXml.setPathFichier(field_pathFile);
 
-                String field_titleProposition = titleProposition.getText();
+                objetXml.setNomEm(field_nameSender);
+                objetXml.setMailExpediteur(field_mailSender);
+                objetXml.setNomRecepteur(field_nameContact);
+                objetXml.setMailDestinataire(field_mailContact);
 
-                message.setPathFichier(field_pathFile);
+                objetXml.setMessages(finalMessages);
+                objetXml.CreateXmlFile(objetXml);
+                messages.clear();
 
-                message.setNomEm(field_nameSender);
-                message.setMailExpediteur(field_mailSender);
-                message.setNomRecepteur(field_nameContact);
-                message.setMailDestinataire(field_mailContact);
-
-                message.setTypeMessage(typeMessage);
-
-                message.setTitreProposition(field_titleProposition);
-                message.setPropositions(finalProposition);
-
-                propositions.clear();
-
-                System.out.println(message.toString());
+                System.out.println(objetXml.toString());
             }
         });
 
@@ -264,7 +270,6 @@ public class MainViewController implements Initializable {
                 .forEach(personne -> {
                     contactsList.add(personne.getPrenom() + " " + personne.getNom());
                 });
-        //MessageDAO.getAllMessageForPersonneId()
         contactListProperty.set(FXCollections.observableArrayList(contactsList));
         contacts.itemsProperty().bind(contactListProperty);
         contactListView.itemsProperty().bind(contactListProperty);
@@ -276,25 +281,167 @@ public class MainViewController implements Initializable {
                 List<Message> messages = MessageDAO.getAllMessageForPersonne(personneSelected.getNumeroAuthoristion());
                 List<String> messageList = new ArrayList<>();
                 messages.forEach(m -> {
-                    String format = m.getStatut();
-                    messageList.add(format);
+                    Boolean noDemande = true;
+                    Boolean noDon = true;
+                    StringBuilder format = new StringBuilder();
+                    m.setObjetsProposed(ObjetDAO.getAllObjetDonForMessage(m.getIdMessage()));
+                    if (!m.getObjetsProposed().isEmpty()) {
+                        noDemande = false;
+                        m.getObjetsProposed().forEach(o -> {
+                            o.setDescriptions(DescriptionDAO.getAllDescriptionForObjetId(o.getIdObjet()));
+                        });
+                        format.append("Don : ");
+                        m.getObjetsProposed().forEach(o -> {
+                            format.append(o.getNom())
+                                .append(" - ")
+                                .append(o.getType());
+                            if(!o.getDescriptions().isEmpty()){
+                                o.getDescriptions().forEach(d -> {
+                                    format.append(" - ")
+                                        .append(d.toString());
+                                });
+                            }
+                        });
+                    }
+                    m.setObjetsAsked(ObjetDAO.getAllObjetDemandeForMessage(m.getIdMessage()));
+                    if (!m.getObjetsAsked().isEmpty()) {
+                        noDon = false;
+                        m.getObjetsAsked().forEach(o -> {
+                            o.setDescriptions(DescriptionDAO.getAllDescriptionForObjetId(o.getIdObjet()));
+                        });
+                        format.append(" / Demande : ");
+                        m.getObjetsAsked().forEach(o -> {
+                            format.append(o.getNom())
+                                .append(" - ")
+                                .append(o.getType());
+                            if(!o.getDescriptions().isEmpty()){
+                                o.getDescriptions().forEach(d -> {
+                                    format.append(" - ")
+                                            .append(d.toString());
+                                    });
+                            }
+                        });
+                    }
+                    if (noDemande && noDon) {
+                        format.append("Demande d'authorisation");
+                    }
+                    messageList.add(format.toString());
                 });
                 messageListProperty.set(FXCollections.observableArrayList(messageList));
                 messageListView.itemsProperty().bind(messageListProperty);
-                
+
                 List<Message> transactions = messages;
-                transactions.forEach(t -> {
-                   if(!t.getStatut().equalsIgnoreCase("accepte") /*&&  il n'y a pas d'objet*/){
-                       transactions.remove(t);
-                   }
-                });
                 List<String> transactionList = new ArrayList<>();
-                transactions.forEach(m -> {
-                    String format = m.getStatut();
-                    transactionList.add(format);
+                transactions.forEach(t -> {
+                    Boolean noDemande = true;
+                    Boolean noDon = true;
+                    StringBuilder format = new StringBuilder();
+                    if (t.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)) {
+                        if (!t.getObjetsAsked().isEmpty()) {
+                            noDemande = false;
+                            t.getObjetsAsked().forEach(o -> {
+                                format.append("Demande : ")
+                                        .append(o.getNom());
+                            });
+                        }
+                        if (!t.getObjetsProposed().isEmpty()) {
+                            noDon = false;
+                            t.getObjetsProposed().forEach(o -> {
+                                format.append(" / Don : ")
+                                        .append(o.getNom());
+                            });
+                        }
+                        if (!noDemande || !noDon) {
+                            transactionList.add(format.toString());
+                        }
+                    }
                 });
                 transactionListProperty.set(FXCollections.observableArrayList(transactionList));
                 transactionListView.itemsProperty().bind(transactionListProperty);
+            
+                Message lastMessage = messages.get(messages.size()-1);
+                changeStateOfButtons(lastMessage);
+                
+                btn_answerMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        lastMessage.setStatut(Message.STATUT_ACCEPTE);
+                        MessageDAO.update(lastMessage);
+                        changeStateOfButtons(lastMessage);
+                        refreshTransactionList();
+                        // appeler ma méthode de création du fichier XML
+                    }
+
+                    private void refreshTransactionList() {
+                        List<Message> transactions = messages;
+                        List<String> transactionList = new ArrayList<>();
+                        transactions.forEach(t -> {
+                            Boolean noDemande = true;
+                            Boolean noDon = true;
+                            StringBuilder format = new StringBuilder();
+                            if (t.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)) {
+                                if (!t.getObjetsAsked().isEmpty()) {
+                                    noDemande = false;
+                                    t.getObjetsAsked().forEach(o -> {
+                                        format.append("Demande : ")
+                                                .append(o.getNom());
+                                    });
+                                }
+                                if (!t.getObjetsProposed().isEmpty()) {
+                                    noDon = false;
+                                    t.getObjetsProposed().forEach(o -> {
+                                        format.append(" / Don : ")
+                                                .append(o.getNom());
+                                    });
+                                }
+                                if (!noDemande || !noDon) {
+                                    transactionList.add(format.toString());
+                                }
+                            }
+                        });
+                        transactionListProperty.set(FXCollections.observableArrayList(transactionList));
+                        transactionListView.itemsProperty().bind(transactionListProperty);
+                    }
+                });
+                
+                btn_CounterProposalMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        lastMessage.setStatut(Message.STATUT_CONTRE_PROPOSE);
+                        MessageDAO.update(lastMessage);
+                        changeStateOfButtons(lastMessage);
+                        // appeler ma méthode de création du fichier XML
+                    }
+                });
+                
+                btn_markRead.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        lastMessage.setStatut(Message.STATUT_EN_ATTENTE);
+                        MessageDAO.update(lastMessage);
+                        changeStateOfButtons(lastMessage);
+                    }
+                });
+            }
+
+            private void changeStateOfButtons(Message lastMessage) {
+                if(lastMessage.getStatut().equalsIgnoreCase(Message.STATUT_NON_LU)){
+                    btn_answerMessage.setDisable(true);
+                    btn_markRead.setDisable(false);
+                    btn_CounterProposalMessage.setDisable(true);
+                } else if(lastMessage.getStatut().equalsIgnoreCase(Message.STATUT_EN_ATTENTE)){
+                    btn_answerMessage.setDisable(false);
+                    btn_markRead.setDisable(true);
+                    btn_CounterProposalMessage.setDisable(false);;
+                } else if(lastMessage.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)){
+                    btn_answerMessage.setDisable(true);
+                    btn_markRead.setDisable(true);
+                    btn_CounterProposalMessage.setDisable(true);
+                } else { //STATUT_CONTREPROPOSE
+                    btn_answerMessage.setDisable(false);
+                    btn_markRead.setDisable(false);
+                    btn_CounterProposalMessage.setDisable(false);
+                }
             }
         });
 
