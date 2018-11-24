@@ -13,7 +13,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -29,9 +28,9 @@ public class Parser {
         fichier = new ObjetXML();
         DocumentBuilderFactory fabrique = DocumentBuilderFactory.newInstance();
         DocumentBuilder constructeur;
+        File xml = new File(path);
         try {
             constructeur = fabrique.newDocumentBuilder();
-            File xml = new File(path);
             Document document = (Document) constructeur.parse(xml);
             document.getDocumentElement().normalize();
             fichier.setIdFichier(document.getElementsByTagName("FicID").item(0).getTextContent());
@@ -44,77 +43,144 @@ public class Parser {
             fichier.setMailExpediteur(document.getElementsByTagName("MailExp").item(0).getTextContent());
             fichier.setPathFichier(path);
             NodeList liste = document.getElementsByTagName("Message");
-            ArrayList<Integer> listeI = new ArrayList<>();
-            for (int i = 0; i < liste.getLength(); i++) {
-                listeI.add(Integer.parseInt(liste.item(i).getAttributes().getNamedItem("MsgId").getTextContent()));
-            }
-            fichier.setMessagesId(listeI);
-            Element dernierMessage = (Element) document.getElementsByTagName("Message").item(liste.getLength() - 1);
-            fichier.setRefMessage(Integer.parseInt(dernierMessage.getAttributes().getNamedItem("ReponseA").getTextContent()));
-            fichier.setDateMessage((Date) new SimpleDateFormat("dd/MM/yyyy").parse(dernierMessage.getElementsByTagName("Dte").item(0).getTextContent()));
-            fichier.setDureeValiditeMessage(Integer.parseInt(dernierMessage.getElementsByTagName("DureeValidMsg").item(0).getTextContent()));
-            Element type;//faire un for pour tout les messages, pas seulement le dernier
-            if (dernierMessage.getElementsByTagName("Prop").item(0) != null) {
-                fichier.setTypeMessage("Prop");
-                type = (Element) dernierMessage.getElementsByTagName("Prop").item(0);
-                fichier.setMessageReponse(type.getElementsByTagName("TitreP").item(0).getTextContent());
-                NodeList offre = type.getElementsByTagName("Offre").item(0).getChildNodes();
-                ArrayList<Objet> p = new ArrayList<>();
-                Objet o = new Objet();
-                Element objet;
-                ArrayList<Description> descriptions;
-                Description description;
-                NodeList parametres;// finir de traiter un message
-                for (int i = 0; i < offre.getLength(); i++) {
-                    objet = (Element) offre.item(i);
-                    o.setNom(objet.getElementsByTagName("NomObjet").item(0).getTextContent());
-                    o.setType(objet.getElementsByTagName("Type").item(0).getTextContent());
-                    descriptions = new ArrayList<>();
-                    parametres = objet.getElementsByTagName("Parametre");
-                    for(int j=0; j < parametres.getLength();j++){
-                        Element e = (Element) parametres.item(i);
-                        description = new Description();
-                        description.setNom(e.getElementsByTagName("Nom").item(0).getTextContent());
-                        description.setValeur(e.getElementsByTagName("Valeur").item(0).getTextContent());
-                        descriptions.add(description);
-                    }
-                    o.setDescriptions(descriptions);
-                    p.add(o);
+            Message message;
+            Element messageEnCours;
+            Element type;
+            for (int k = 0; k < liste.getLength(); k++) {
+                message = new Message();
+                messageEnCours = (Element) liste.item(k);
+                message.setIdMessage(Integer.parseInt(messageEnCours.getAttribute("MsgId")));
+                if (messageEnCours.hasAttribute("ReponseA")) {
+                    message.setIdMessageParent(Integer.parseInt(messageEnCours.getAttribute("ReponseA")));
                 }
-                
-                NodeList prop = type.getElementsByTagName("Demande").item(0).getChildNodes();;
-             for (int i = 0; i < prop.getLength(); i++) {
-                    objet = (Element) prop.item(i);
-                    o.setNom(objet.getElementsByTagName("NomObjet").item(0).getTextContent());
-                    o.setType(objet.getElementsByTagName("Type").item(0).getTextContent());
-                    descriptions = new ArrayList<>();
-                    parametres = objet.getElementsByTagName("Parametre");
-                    for(int j=0; j < parametres.getLength();j++){
-                        Element e = (Element) parametres.item(i);
-                        description = new Description();
-                        description.setNom(e.getElementsByTagName("Nom").item(0).getTextContent());
-                        description.setValeur(e.getElementsByTagName("Valeur").item(0).getTextContent());
-                        descriptions.add(description);
+                message.setDateMessage((Date) new SimpleDateFormat("dd/mm/yyyy").parse(messageEnCours.getElementsByTagName("Dte").item(0).getTextContent()));
+                message.setDureeValiditeMessage(Integer.parseInt(messageEnCours.getElementsByTagName("DureeValideMsg").item(0).getTextContent()));
+
+                if (messageEnCours.getElementsByTagName("Prop").item(0) != null) {
+                    message.setTypeMessage("Prop");
+                    type = (Element) messageEnCours.getElementsByTagName("Prop").item(0);
+                    message.setTitreProposition(type.getElementsByTagName("TitreP").item(0).getTextContent());
+                    NodeList offre = type.getElementsByTagName("Offre").item(0).getChildNodes();
+                    ArrayList<Objet> p = new ArrayList<>();
+                    Objet o = new Objet();
+                    Element objet;
+                    ArrayList<Description> descriptions;
+                    Description description;
+                    NodeList parametres;// finir de traiter un message
+                    for (int i = 0; i < offre.getLength(); i++) {
+                        objet = (Element) offre.item(i);
+                        o.setNom(objet.getElementsByTagName("NomObjet").item(0).getTextContent());
+                        o.setType(objet.getElementsByTagName("Type").item(0).getTextContent());
+                        descriptions = new ArrayList<>();
+                        parametres = objet.getElementsByTagName("Parametre");
+                        for (int j = 0; j < parametres.getLength(); j++) {
+                            Element e = (Element) parametres.item(i);
+                            description = new Description();
+                            description.setNom(e.getElementsByTagName("Nom").item(0).getTextContent());
+                            description.setValeur(e.getElementsByTagName("Valeur").item(0).getTextContent());
+                            descriptions.add(description);
+                        }
+                        o.setDescriptions(descriptions);
+                        p.add(o);
                     }
-                    o.setDescriptions(descriptions);
-                    p.add(o);
+                    message.setObjetsProposed(p);
+                    p = new ArrayList<>();
+
+                    NodeList prop = type.getElementsByTagName("Demande").item(0).getChildNodes();
+                    for (int i = 0; i < prop.getLength(); i++) {
+                        objet = (Element) prop.item(i);
+                        o.setNom(objet.getElementsByTagName("NomObjet").item(0).getTextContent());
+                        o.setType(objet.getElementsByTagName("Type").item(0).getTextContent());
+                        descriptions = new ArrayList<>();
+                        parametres = objet.getElementsByTagName("Parametre");
+                        for (int j = 0; j < parametres.getLength(); j++) {
+                            Element e = (Element) parametres.item(i);
+                            description = new Description();
+                            description.setNom(e.getElementsByTagName("Nom").item(0).getTextContent());
+                            description.setValeur(e.getElementsByTagName("Valeur").item(0).getTextContent());
+                            descriptions.add(description);
+                        }
+                        o.setDescriptions(descriptions);
+                        p.add(o);
+                    }
+                    message.setObjetsAsked(p);
                 }
-            }
-            if (dernierMessage.getElementsByTagName("Auth").item(0) != null) {
-                fichier.setTypeMessage("Auth");
-                type = (Element) dernierMessage.getElementsByTagName("Auth").item(0);
-            }
-            if (dernierMessage.getElementsByTagName("Dmd").item(0) != null) {
-                fichier.setTypeMessage("Dmd");
-                type = (Element) dernierMessage.getElementsByTagName("Dmd").item(0);
-            }
-            if (dernierMessage.getElementsByTagName("Accep").item(0) != null) {
-                fichier.setTypeMessage("Accep");
-                type = (Element) dernierMessage.getElementsByTagName("Accep").item(0);
+                if (messageEnCours.getElementsByTagName("Auth").item(0) != null) {
+                    message.setTypeMessage("Auth");
+                    type = (Element) messageEnCours.getElementsByTagName("Auth").item(0);
+                    type = (Element) type.getElementsByTagName("Rep").item(0);
+                    if (type.getElementsByTagName("AccAuth").item(0) != null) {
+                        message.setAcceptAuthorisation(type.getElementsByTagName("AccAuth").item(0).getTextContent());
+                    } else {
+                        message.setAcceptAuthorisation(type.getElementsByTagName("RefAuth").item(0).getTextContent());
+                    }
+                }
+                if (messageEnCours.getElementsByTagName("Dmd").item(0) != null) {
+                    message.setTypeMessage("Dmd");
+                    type = (Element) messageEnCours.getElementsByTagName("Dmd").item(0);
+                    message.setDescriptionDemande(type.getElementsByTagName("DescDmd").item(0).getTextContent());
+                    message.setDebutDemande((Date) new SimpleDateFormat("dd/MM/yyyy").parse(type.getElementsByTagName("DateDebut").item(0).getTextContent()));
+                    message.setFinDemande((Date) new SimpleDateFormat("dd/MM/yyyy").parse(type.getElementsByTagName("DateFin").item(0).getTextContent()));
+                }
+                if (messageEnCours.getElementsByTagName("Accep").item(0) != null) {
+                    message.setTypeMessage("Accep");
+                    type = (Element) messageEnCours.getElementsByTagName("Accep").item(0);
+                    if(type.getElementsByTagName("MessageValid").item(0) != null)
+                        message.setMessageReponse(type.getElementsByTagName("MessageValid").item(0).getTextContent());
+                    else{
+                        type = (Element) messageEnCours.getElementsByTagName("Prop").item(0);
+                    message.setTitreProposition(type.getElementsByTagName("TitreP").item(0).getTextContent());
+                    NodeList offre = type.getElementsByTagName("Offre").item(0).getChildNodes();
+                    ArrayList<Objet> p = new ArrayList<>();
+                    Objet o = new Objet();
+                    Element objet;
+                    ArrayList<Description> descriptions;
+                    Description description;
+                    NodeList parametres;// finir de traiter un message
+                    for (int i = 0; i < offre.getLength(); i++) {
+                        objet = (Element) offre.item(i);
+                        o.setNom(objet.getElementsByTagName("NomObjet").item(0).getTextContent());
+                        o.setType(objet.getElementsByTagName("Type").item(0).getTextContent());
+                        descriptions = new ArrayList<>();
+                        parametres = objet.getElementsByTagName("Parametre");
+                        for (int j = 0; j < parametres.getLength(); j++) {
+                            Element e = (Element) parametres.item(i);
+                            description = new Description();
+                            description.setNom(e.getElementsByTagName("Nom").item(0).getTextContent());
+                            description.setValeur(e.getElementsByTagName("Valeur").item(0).getTextContent());
+                            descriptions.add(description);
+                        }
+                        o.setDescriptions(descriptions);
+                        p.add(o);
+                    }
+                    message.setObjetsProposed(p);
+                    p = new ArrayList<>();
+
+                    NodeList prop = type.getElementsByTagName("Demande").item(0).getChildNodes();
+                    for (int i = 0; i < prop.getLength(); i++) {
+                        objet = (Element) prop.item(i);
+                        o.setNom(objet.getElementsByTagName("NomObjet").item(0).getTextContent());
+                        o.setType(objet.getElementsByTagName("Type").item(0).getTextContent());
+                        descriptions = new ArrayList<>();
+                        parametres = objet.getElementsByTagName("Parametre");
+                        for (int j = 0; j < parametres.getLength(); j++) {
+                            Element e = (Element) parametres.item(i);
+                            description = new Description();
+                            description.setNom(e.getElementsByTagName("Nom").item(0).getTextContent());
+                            description.setValeur(e.getElementsByTagName("Valeur").item(0).getTextContent());
+                            descriptions.add(description);
+                        }
+                        o.setDescriptions(descriptions);
+                        p.add(o);
+                    }
+                    message.setObjetsAsked(p);
+                    }
+                }
+                fichier.getMessages().add(message);
             }
 
         } catch (ParserConfigurationException | SAXException | IOException | ParseException ex) {
-            Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, ex);
+            xml.delete();
         }
 
     }
