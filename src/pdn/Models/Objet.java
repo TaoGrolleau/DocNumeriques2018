@@ -14,5 +14,9 @@ public class Objet implements Serializable {
     
     public Objet(){}
     
+    @Override
+    public String toString(){
+        return "Nom Objet: "+ this.nom + ", Type: " + this.type + ", Paramètres :" + this.descriptions;
+    }
 
 }
