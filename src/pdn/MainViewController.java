@@ -4,11 +4,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Date;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -143,9 +145,12 @@ public class MainViewController implements Initializable {
                 Description newParameter = new Description();
                 newParameter.setNom(nameParameterObjectProposed.getText());
                 newParameter.setValeur(valueParameterObjectProposed.getText());
-                listParameterObjetProposed.add(newParameter);
-                nameParameterObjectProposed.setText("");
-                valueParameterObjectProposed.setText("");
+                if (!(nameParameterObjectProposed.getText().isEmpty()) && !(valueParameterObjectProposed.getText().isEmpty())) {
+                    listParameterObjetProposed.add(newParameter);
+                    nameParameterObjectProposed.setText("");
+                    valueParameterObjectProposed.setText("");
+                }
+
                 System.out.println(listParameterObjetProposed.toString());
             }
         });
@@ -157,9 +162,11 @@ public class MainViewController implements Initializable {
                 Description newParameter = new Description();
                 newParameter.setNom(nameParameterObjectAsked.getText());
                 newParameter.setValeur(valueParameterObjectAsked.getText());
-                listParameterObjetAsked.add(newParameter);
-                nameParameterObjectAsked.setText("");
-                valueParameterObjectAsked.setText("");
+                if (!(nameParameterObjectAsked.getText().isEmpty()) && !(valueParameterObjectAsked.getText().isEmpty())) {
+                    listParameterObjetAsked.add(newParameter);
+                    nameParameterObjectAsked.setText("");
+                    valueParameterObjectAsked.setText("");
+                }
                 System.out.println(listParameterObjetAsked.toString());
             }
         });
@@ -180,9 +187,11 @@ public class MainViewController implements Initializable {
                 newObjectProposed.setDescriptions(objectDescriptions);
 
                 listObjetProposed.add(newObjectProposed);
-
                 listParameterObjetProposed.clear();
+
                 System.out.println(listObjetProposed.toString());
+                ObservableList<Objet> items = FXCollections.observableArrayList(listObjetProposed);
+                list_objetProposed.setItems(items);
             }
         });
 
@@ -202,8 +211,11 @@ public class MainViewController implements Initializable {
                 newObjetAsked.setDescriptions(objectDescriptions);
 
                 listObjetAsked.add(newObjetAsked);
-                System.out.println(listObjetAsked.toString());
                 listParameterObjetAsked.clear();
+
+                System.out.println(listObjetAsked.toString());
+                ObservableList<Objet> items = FXCollections.observableArrayList(listObjetAsked);
+                list_objetAsked.setItems(items);
             }
         });
 
@@ -224,7 +236,7 @@ public class MainViewController implements Initializable {
 
                 newMessage.setObjetsProposed(objectsProposed);
                 newMessage.setObjetsAsked(objectsAsked);
-                
+
                 newMessage.setTypeMessage(typeMessage);
                 newMessage.setTitreProposition(field_titleProposition);
 
@@ -232,6 +244,9 @@ public class MainViewController implements Initializable {
                 listObjetProposed.clear();
                 listObjetAsked.clear();
                 System.out.println(messages.toString());
+                ObservableList<Message> items = FXCollections.observableArrayList(messages);
+                list_Propositions.setItems(items);
+
             }
         });
 
@@ -242,26 +257,37 @@ public class MainViewController implements Initializable {
                 ObjetXML objetXml = new ObjetXML();
                 List<Message> finalMessages = new ArrayList<>();
                 finalMessages.addAll(messages);
-
+                
+                Date dateSignature = new Date();
+                
                 String field_pathFile = pathMessageCreated.getText();
 
                 String field_nameSender = nameSender.getText();
                 String field_mailSender = emailSender.getText();
-                String field_nameContact = nameContact.getText();
-                String field_mailContact = emailContact.getText();
 
+                if (nameContact.getText().isEmpty() && !contacts.getSelectionModel().isEmpty()) {
+                    Personne contact = PersonneDAO.getPersonneWithName(contacts.getSelectionModel().getSelectedItem().toString());
+                    objetXml.setNomRecepteur(contact.getNom());
+                    objetXml.setMailDestinataire(contact.getEmail());
+                } else {
+                    String field_nameContact = nameContact.getText();
+                    String field_mailContact = emailContact.getText();
+                    objetXml.setNomRecepteur(field_nameContact);
+                    objetXml.setMailDestinataire(field_mailContact);
+                }
+                
                 objetXml.setPathFichier(field_pathFile);
-
+                objetXml.setIdFichier(Double.toString(Math.random()));
+                objetXml.setSignatureAuthorisation(dateSignature);
+                objetXml.setDureeValidite(20160);
                 objetXml.setNomEm(field_nameSender);
                 objetXml.setMailExpediteur(field_mailSender);
-                objetXml.setNomRecepteur(field_nameContact);
-                objetXml.setMailDestinataire(field_mailContact);
 
                 objetXml.setMessages(finalMessages);
-                objetXml.CreateXmlFile(objetXml);
+                ObjetXML.CreateXmlFile(objetXml);
                 messages.clear();
 
-                System.out.println(objetXml.toString());
+                System.out.println(objetXml.toString()); 
             }
         });
 
@@ -293,12 +319,12 @@ public class MainViewController implements Initializable {
                         format.append("Don : ");
                         m.getObjetsProposed().forEach(o -> {
                             format.append(o.getNom())
-                                .append(" - ")
-                                .append(o.getType());
-                            if(!o.getDescriptions().isEmpty()){
+                                    .append(" - ")
+                                    .append(o.getType());
+                            if (!o.getDescriptions().isEmpty()) {
                                 o.getDescriptions().forEach(d -> {
                                     format.append(" - ")
-                                        .append(d.toString());
+                                            .append(d.toString());
                                 });
                             }
                         });
@@ -312,13 +338,13 @@ public class MainViewController implements Initializable {
                         format.append(" / Demande : ");
                         m.getObjetsAsked().forEach(o -> {
                             format.append(o.getNom())
-                                .append(" - ")
-                                .append(o.getType());
-                            if(!o.getDescriptions().isEmpty()){
+                                    .append(" - ")
+                                    .append(o.getType());
+                            if (!o.getDescriptions().isEmpty()) {
                                 o.getDescriptions().forEach(d -> {
                                     format.append(" - ")
                                             .append(d.toString());
-                                    });
+                                });
                             }
                         });
                     }
@@ -358,10 +384,10 @@ public class MainViewController implements Initializable {
                 });
                 transactionListProperty.set(FXCollections.observableArrayList(transactionList));
                 transactionListView.itemsProperty().bind(transactionListProperty);
-            
-                Message lastMessage = messages.get(messages.size()-1);
+
+                Message lastMessage = messages.get(messages.size() - 1);
                 changeStateOfButtons(lastMessage);
-                
+
                 btn_answerMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
@@ -403,7 +429,7 @@ public class MainViewController implements Initializable {
                         transactionListView.itemsProperty().bind(transactionListProperty);
                     }
                 });
-                
+
                 btn_CounterProposalMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
@@ -413,7 +439,7 @@ public class MainViewController implements Initializable {
                         // appeler ma méthode de création du fichier XML
                     }
                 });
-                
+
                 btn_markRead.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
@@ -425,15 +451,15 @@ public class MainViewController implements Initializable {
             }
 
             private void changeStateOfButtons(Message lastMessage) {
-                if(lastMessage.getStatut().equalsIgnoreCase(Message.STATUT_NON_LU)){
+                if (lastMessage.getStatut().equalsIgnoreCase(Message.STATUT_NON_LU)) {
                     btn_answerMessage.setDisable(true);
                     btn_markRead.setDisable(false);
                     btn_CounterProposalMessage.setDisable(true);
-                } else if(lastMessage.getStatut().equalsIgnoreCase(Message.STATUT_EN_ATTENTE)){
+                } else if (lastMessage.getStatut().equalsIgnoreCase(Message.STATUT_EN_ATTENTE)) {
                     btn_answerMessage.setDisable(false);
                     btn_markRead.setDisable(true);
                     btn_CounterProposalMessage.setDisable(false);;
-                } else if(lastMessage.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)){
+                } else if (lastMessage.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)) {
                     btn_answerMessage.setDisable(true);
                     btn_markRead.setDisable(true);
                     btn_CounterProposalMessage.setDisable(true);
