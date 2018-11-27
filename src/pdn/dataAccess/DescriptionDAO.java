@@ -36,4 +36,17 @@ public class DescriptionDAO extends DatabaseController {
         return descriptions;
     }
     
+    public static int insererDescription(String nom, String valeur){
+        Statement statement;
+        ResultSet rs;
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery("insert into description (nom, valeur) values (" + nom + ", " + valeur + "); ");
+            return rs.getInt("id_description");
+        } catch (SQLException ex) {
+            Logger.getLogger(ObjetDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
 }

@@ -48,5 +48,26 @@ public class MessageDAO extends DatabaseController{
             Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, "update error", ex);
         }
     }
-    
+     
+     public static void insererMessage(Long idMessage, Long idMessageParent){
+        try {
+            Statement statement = connection.createStatement();
+            if(idMessageParent != null)
+                statement.execute("insert into message (id_message, id_message_parent, statut) values ("+ idMessage + ", "+ idMessageParent +", 'non_lu'); ");
+        else
+                statement.execute("insert into message (id_message, statut) values ("+ idMessage + ", 'non_lu'); ");
+        } catch (SQLException ex) {
+            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     }
+        
+    public static void associerMessagePersonne(Long idMessage, int idPersonne){
+        Statement statement;
+        try {
+            statement = connection.createStatement();
+            statement.execute("insert into message_a_personne values (" + idPersonne + ", " + idMessage + ");" );
+        } catch (SQLException ex) {
+            Logger.getLogger(ObjetDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
