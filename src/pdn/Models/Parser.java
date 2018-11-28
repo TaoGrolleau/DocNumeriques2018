@@ -391,7 +391,7 @@ public class Parser {
             for (Message message : this.fichier.getMessages()) {
                 if (!messages.contains(message)) {
                     MessageDAO.insererMessage(message.getIdMessage(), message.getIdMessageParent());
-                    MessageDAO.associerMessagePersonne(message.getIdMessage(), personne.getNumeroAuthoristion());
+                    MessageDAO.associerMessagePersonne(message.getIdMessage(), personne.getNumeroAuthorisation());
                     for (Objet o : message.getObjetsProposed()) {
                         idObjet = ObjetDAO.insererObjet(o.getNom(), o.getType());
                         for (Description d : o.getDescriptions()) {
