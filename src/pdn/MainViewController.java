@@ -257,9 +257,9 @@ public class MainViewController implements Initializable {
                 ObjetXML objetXml = new ObjetXML();
                 List<Message> finalMessages = new ArrayList<>();
                 finalMessages.addAll(messages);
-                
+
                 Date dateSignature = new Date();
-                
+
                 String field_pathFile = pathMessageCreated.getText();
 
                 String field_nameSender = nameSender.getText();
@@ -269,16 +269,20 @@ public class MainViewController implements Initializable {
                     Personne contact = PersonneDAO.getPersonneWithName(contacts.getSelectionModel().getSelectedItem().toString());
                     objetXml.setNomRecepteur(contact.getNom());
                     objetXml.setMailDestinataire(contact.getEmail());
+                    objetXml.setNumAuthorisation(contact.getNumeroAuthorisation().toString());
+                    objetXml.setSignatureAuthorisation(contact.getSignatureAuthorisation());
                 } else {
                     String field_nameContact = nameContact.getText();
                     String field_mailContact = emailContact.getText();
                     objetXml.setNomRecepteur(field_nameContact);
                     objetXml.setMailDestinataire(field_mailContact);
                 }
-                
+
                 objetXml.setPathFichier(field_pathFile);
+                
+                //A verifier parceque pas très good cet id fichier
                 objetXml.setIdFichier(Double.toString(Math.random()));
-                objetXml.setSignatureAuthorisation(dateSignature);
+
                 objetXml.setDureeValidite(20160);
                 objetXml.setNomEm(field_nameSender);
                 objetXml.setMailExpediteur(field_mailSender);
@@ -287,7 +291,7 @@ public class MainViewController implements Initializable {
                 ObjetXML.CreateXmlFile(objetXml);
                 messages.clear();
 
-                System.out.println(objetXml.toString()); 
+                System.out.println(objetXml.toString());
             }
         });
 
@@ -304,7 +308,7 @@ public class MainViewController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 messageMainTitle.setText(newValue);
                 Personne personneSelected = PersonneDAO.getPersonneWithName(newValue);
-                List<Message> messages = MessageDAO.getAllMessageForPersonne(personneSelected.getNumeroAuthoristion());
+                List<Message> messages = MessageDAO.getAllMessageForPersonne(personneSelected.getNumeroAuthorisation());
                 List<String> messageList = new ArrayList<>();
                 messages.forEach(m -> {
                     Boolean noDemande = true;
