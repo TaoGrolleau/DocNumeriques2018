@@ -8,6 +8,11 @@ import lombok.Data;
 @Data
 public class Personne implements Serializable {
     
+    public static final String PRENOM = "Eudes";
+    public static final String NOM = "Delabuissonniere";
+    public static final String EMAIL = "eudes.delabuissonniere@gmail.com";
+    public static final String NOM_GLOBAL = "Eudes Delabuissonniere";
+    
     private Integer numeroAuthorisation;
     private Date signatureAuthorisation;
     private List<Message> messages;
@@ -17,5 +22,10 @@ public class Personne implements Serializable {
     private String email;
     
     public Personne(){}
+    
+    @Override
+    public String toString(){
+        return this.nom + " " + this.prenom;
+    }
     
 }
