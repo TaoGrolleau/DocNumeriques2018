@@ -32,7 +32,7 @@ public class ObjetXML {
     public ObjetXML() {
         messages = new ArrayList<>();
         this.idFichier = "1";
-
+        this.pathFichier = "./fichier.xml";
     }
 
     public void CreateXmlFile() throws FileNotFoundException, UnsupportedEncodingException {

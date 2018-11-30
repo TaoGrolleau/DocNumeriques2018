@@ -3,6 +3,8 @@ package pdn;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
@@ -120,6 +123,8 @@ public class MainViewController implements Initializable {
     List<Objet> listObjetAsked = new ArrayList<>();
 
     List<Message> messages = new ArrayList<>();
+
+    RadioButton selectedtypeMessage;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -228,18 +233,23 @@ public class MainViewController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 Message newMessage = new Message();
+                Date dateSignature = new Date();
+                selectedtypeMessage = (RadioButton) radiobtn_typeMessage.getSelectedToggle();
 
                 List<Objet> objectsProposed = new ArrayList<>();
                 objectsProposed.addAll(listObjetProposed);
                 List<Objet> objectsAsked = new ArrayList<>();
                 objectsAsked.addAll(listObjetAsked);
 
-                String typeMessage = radiobtn_typeMessage.getSelectedToggle().toString();
+                String typeMessage = selectedtypeMessage.getText();
 
                 String field_titleProposition = titleProposition.getText();
 
                 newMessage.setObjetsProposed(objectsProposed);
                 newMessage.setObjetsAsked(objectsAsked);
+
+                newMessage.setDateMessage(dateSignature);
+                newMessage.setDureeValiditeMessage(14);
 
                 newMessage.setTypeMessage(typeMessage);
                 newMessage.setTitreProposition(field_titleProposition);
@@ -259,43 +269,48 @@ public class MainViewController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 ObjetXML objetXml = new ObjetXML();
+                DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                Date dateSignature = new Date();
+                selectedtypeMessage = (RadioButton) radiobtn_typeMessage.getSelectedToggle();
+
+                if (selectedtypeMessage.getText().equals("Demande D'authorisation")) {
+                    Message newMessage = new Message();
+                    newMessage.setDateMessage(dateSignature);
+                    newMessage.setDureeValiditeMessage(14);
+                    newMessage.setTypeMessage(selectedtypeMessage.getText());
+                    
+                    String field_nameContact = nameContact.getText();
+                    String field_mailContact = emailContact.getText();
+                    objetXml.setNomRecepteur(field_nameContact);
+                    objetXml.setMailDestinataire(field_mailContact);
+                    messages.add(newMessage);
+                }
+
                 List<Message> finalMessages = new ArrayList<>();
                 finalMessages.addAll(messages);
 
-                Date dateSignature = new Date();
-
                 String field_pathFile = pathMessageCreated.getText();
+                objetXml.setNomEm(Personne.NOM_GLOBAL);
+                objetXml.setMailExpediteur(Personne.EMAIL);
 
-                String field_nameSender = nameSender.getText();
-                String field_mailSender = emailSender.getText();
-
-                if (nameContact.getText().isEmpty() && !contacts.getSelectionModel().isEmpty()) {
+                if (!contacts.getSelectionModel().isEmpty()) {
                     Personne contact = PersonneDAO.getPersonneWithName(contacts.getSelectionModel().getSelectedItem().toString());
                     objetXml.setNomRecepteur(contact.getNom());
                     objetXml.setMailDestinataire(contact.getEmail());
                     objetXml.setNumAuthorisation(contact.getNumeroAuthorisation().toString());
                     objetXml.setSignatureAuthorisation(contact.getSignatureAuthorisation());
-                } else {
-                    String field_nameContact = nameContact.getText();
-                    String field_mailContact = emailContact.getText();
-                    objetXml.setNomRecepteur(field_nameContact);
-                    objetXml.setMailDestinataire(field_mailContact);
                 }
 
-                objetXml.setPathFichier(field_pathFile);
+                if (!field_pathFile.isEmpty()) {
+                    objetXml.setPathFichier(field_pathFile);
+                }
 
-                //A verifier parceque pas très good cet id fichier
-                objetXml.setIdFichier(Double.toString(Math.random()));
-
-                objetXml.setDureeValidite(20160);
-                objetXml.setNomEm(field_nameSender);
-                objetXml.setMailExpediteur(field_mailSender);
-
+                objetXml.setDureeValidite(14);
                 objetXml.setMessages(finalMessages);
+
                 try {
                     objetXml.CreateXmlFile();
                 } catch (FileNotFoundException | UnsupportedEncodingException ex) {
-                    Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 messages.clear();
 

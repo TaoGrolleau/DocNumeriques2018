@@ -42,6 +42,11 @@
                         <Font name="System Bold" size="24.0" />
                      </font></Label>
                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="33.0" prefWidth="1017.0" text="Encadré par Pierre MARET, créé par Maleine PATURAL, Céline BUFFAT, Tao GROLLEAU et Sébastien RICO " textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="9.0" prefHeight="33.0" prefWidth="1008.0" text="Projet Document Numérique" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
                </children>
             </GridPane>
             <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
@@ -149,7 +154,7 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                <Tab text="Create file">
+                <Tab id="tab_createFile" text="Create file">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -189,7 +194,7 @@
                                        <children>
                                           <Label text="Votre nom:" />
                                           <Label text="Nom du nouveau contact" GridPane.rowIndex="4" />
-                                          <TextField fx:id="nameSender" GridPane.rowIndex="1">
+                                          <TextField fx:id="nameSender" editable="false" text="Eudes Delabuissonniere" GridPane.rowIndex="1">
                                              <GridPane.margin>
                                                 <Insets left="10.0" right="10.0" />
                                              </GridPane.margin></TextField>
@@ -208,7 +213,7 @@
                                           <TextField fx:id="pathMessageCreated" promptText="Path..." GridPane.rowIndex="13" />
                                           <Label text="Votre email:" GridPane.rowIndex="2" />
                                           <Label text="Email du nouveau contact:" GridPane.rowIndex="6" />
-                                          <TextField fx:id="emailSender" GridPane.rowIndex="3">
+                                          <TextField fx:id="emailSender" editable="false" text="eudes.delabuissonniere@gmail.com" GridPane.rowIndex="3">
                                              <GridPane.margin>
                                                 <Insets left="10.0" right="10.0" />
                                              </GridPane.margin>
