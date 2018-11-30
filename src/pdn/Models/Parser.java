@@ -60,11 +60,6 @@ public class Parser {
             } else {
                 this.noAuth = true;
             }
-            if (document.getElementsByTagName("DtOfSgtAuto").item(0) != null && !this.noAuth) {
-                this.fichier.setSignatureAuthorisation((Date) new SimpleDateFormat("dd/MM/yyyy").parse(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent()));
-            } else if (!this.noAuth) {
-                throw new IOException();
-            }
             if (document.getElementsByTagName("DureeValidAuto").item(0) != null && !this.noAuth) {
                 this.fichier.setDureeValidite(Integer.parseInt(document.getElementsByTagName("DureeValidAuto").item(0).getTextContent()));
             } else if (!this.noAuth) {
@@ -160,6 +155,11 @@ public class Parser {
                         throw new IOException();
                     }
                     if (messageEnCours.getElementsByTagName("Prop").item(0) != null) {
+                        if (document.getElementsByTagName("DtOfSgtAuto").item(0) != null && !this.noAuth) {
+                            this.fichier.setSignatureAuthorisation((Date) new SimpleDateFormat("dd/MM/yyyy").parse(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent()));
+                        } else if (!this.noAuth) {
+                            throw new IOException();
+                        }
                         message.setTypeMessage("Prop");
                         type = (Element) messageEnCours.getElementsByTagName("Prop").item(0);
                         message.setTitreProposition(type.getElementsByTagName("TitreP").item(0).getTextContent());
@@ -252,6 +252,11 @@ public class Parser {
                         message.setObjetsAsked(p);
                     }
                     if (messageEnCours.getElementsByTagName("Auth").item(0) != null) {
+                        if (document.getElementsByTagName("DtOfSgtAuto").item(0) != null && !this.noAuth) {
+                            this.fichier.setSignatureAuthorisation((Date) new SimpleDateFormat("dd/MM/yyyy").parse(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent()));
+                        } else if (!this.noAuth) {
+                            throw new IOException();
+                        }
                         message.setTypeMessage("Auth");
                         type = (Element) messageEnCours.getElementsByTagName("Auth").item(0);
                         type = (Element) type.getElementsByTagName("Rep").item(0);
@@ -261,6 +266,11 @@ public class Parser {
 
                     }
                     if (messageEnCours.getElementsByTagName("Dmd").item(0) != null) {
+                        if (document.getElementsByTagName("DtOfSgtAuto").item(0) != null && !this.noAuth) {
+                            this.fichier.setSignatureAuthorisation((Date) new SimpleDateFormat("dd/MM/yyyy").parse(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent()));
+                        } else if (!this.noAuth) {
+                            throw new IOException();
+                        }
                         message.setTypeMessage("Dmd");
                         type = (Element) messageEnCours.getElementsByTagName("Dmd").item(0);
 
@@ -275,6 +285,11 @@ public class Parser {
                         message.setFinDemande((Date) new SimpleDateFormat("dd/MM/yyyy").parse(type.getElementsByTagName("DateFin").item(0).getTextContent()));
                     }
                     if (messageEnCours.getElementsByTagName("Accep").item(0) != null) {
+                        if (document.getElementsByTagName("DtOfSgtAuto").item(0) != null && !this.noAuth) {
+                            this.fichier.setSignatureAuthorisation((Date) new SimpleDateFormat("dd/MM/yyyy").parse(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent()));
+                        } else if (!this.noAuth) {
+                            throw new IOException();
+                        }
                         message.setTypeMessage("Accep");
                         type = (Element) messageEnCours.getElementsByTagName("Accep").item(0);
                         if (type.getElementsByTagName("MessageValid").item(0) != null) {
@@ -373,7 +388,7 @@ public class Parser {
                     this.fichier.getMessages().add(message);
                 }
             }
-            if(!this.XmlABaseDeDonnee()){
+            if (!this.XmlABaseDeDonnee()) {
                 throw new IOException();
             }
         } catch (ParserConfigurationException | SAXException | IOException | ParseException ex) {
