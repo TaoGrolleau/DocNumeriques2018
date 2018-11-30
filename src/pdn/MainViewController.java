@@ -21,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
@@ -35,6 +36,8 @@ import pdn.dataAccess.ObjetDAO;
 import pdn.dataAccess.PersonneDAO;
 
 public class MainViewController implements Initializable {
+    
+    private final String PATH = "././createdFiles/file.xml";
 
     @FXML
     private TextField txt_path;
@@ -108,6 +111,9 @@ public class MainViewController implements Initializable {
 
     @FXML
     private Label messageMainTitle;
+    
+    @FXML
+    private Tab tab_createFile;
 
     ListProperty<String> contactListProperty = new SimpleListProperty<>();
     ListProperty<String> messageListProperty = new SimpleListProperty<>();
@@ -404,11 +410,30 @@ public class MainViewController implements Initializable {
                     btn_answerMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
-                            lastMessage.setStatut(Message.STATUT_ACCEPTE);
-                            MessageDAO.update(lastMessage);
-                            changeStateOfButtons(lastMessage);
-                            refreshTransactionList();
-                            // appeler ma méthode de création du fichier XML
+                            
+                            ObjetXML objetXML = new ObjetXML();
+                            try {
+                                // appeler ma méthode de création du fichier XML
+                                objetXML.setNomEm(Personne.NOM);
+                                objetXML.setNomRecepteur(personneSelected.toString());
+                                objetXML.setNumAuthorisation(personneSelected.getNumeroAuthorisation().toString());
+                                objetXML.setSignatureAuthorisation(personneSelected.getSignatureAuthorisation());
+                                objetXML.setDureeValidite(lastMessage.getDureeValiditeMessage());
+                                objetXML.setMailDestinataire(personneSelected.getEmail());
+                                objetXML.setMailExpediteur(Personne.EMAIL);
+                                objetXML.setPathFichier(PATH);
+                                Message reponse = new Message();
+                                reponse.setTypeMessage("Accep");
+                                messages.add(reponse);
+                                objetXML.setMessages(messages);
+                                objetXML.CreateXmlFile();
+                                lastMessage.setStatut(Message.STATUT_ACCEPTE);
+                                MessageDAO.update(lastMessage);
+                                changeStateOfButtons(lastMessage);
+                                refreshTransactionList();
+                            } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+                                Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
 
                         private void refreshTransactionList() {
@@ -449,7 +474,9 @@ public class MainViewController implements Initializable {
                             lastMessage.setStatut(Message.STATUT_CONTRE_PROPOSE);
                             MessageDAO.update(lastMessage);
                             changeStateOfButtons(lastMessage);
-                            // appeler ma méthode de création du fichier XML
+                            // ouvrir l'onglet pour répondre
+                            // selectionner par défaut la contre propostition (radiobutton)
+                            // sélectionner par défaut le contact
                         }
                     });
 
