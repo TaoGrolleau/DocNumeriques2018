@@ -412,7 +412,7 @@ public class Parser {
             }
         } else if (noAuth) {
             String[] nomComplet = this.fichier.getNomEm().split(" ");
-            int idPersonne = PersonneDAO.insererPersonne(nomComplet[0], nomComplet[1], this.fichier.getMailExpediteur());
+            int idPersonne = PersonneDAO.insererPersonne(nomComplet[0], nomComplet[1], this.fichier.getMailExpediteur(), this.fichier.getSignatureAuthorisation().toString());
             Message message = this.fichier.getMessages().get(0);
             MessageDAO.insererMessage(message.getIdMessage(), message.getIdMessageParent());
             MessageDAO.associerMessagePersonne(message.getIdMessage(), idPersonne);

@@ -1,10 +1,14 @@
 package pdn;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
@@ -279,7 +283,7 @@ public class MainViewController implements Initializable {
                 }
 
                 objetXml.setPathFichier(field_pathFile);
-                
+
                 //A verifier parceque pas très good cet id fichier
                 objetXml.setIdFichier(Double.toString(Math.random()));
 
@@ -288,7 +292,11 @@ public class MainViewController implements Initializable {
                 objetXml.setMailExpediteur(field_mailSender);
 
                 objetXml.setMessages(finalMessages);
-                ObjetXML.CreateXmlFile(objetXml);
+                try {
+                    objetXml.CreateXmlFile();
+                } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+                    Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 messages.clear();
 
                 System.out.println(objetXml.toString());
@@ -388,70 +396,72 @@ public class MainViewController implements Initializable {
                 });
                 transactionListProperty.set(FXCollections.observableArrayList(transactionList));
                 transactionListView.itemsProperty().bind(transactionListProperty);
+                Message lastMessage;
+                if (messages.size() > 0) {
+                    lastMessage = messages.get(messages.size() - 1);
+                    changeStateOfButtons(lastMessage);
 
-                Message lastMessage = messages.get(messages.size() - 1);
-                changeStateOfButtons(lastMessage);
+                    btn_answerMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            lastMessage.setStatut(Message.STATUT_ACCEPTE);
+                            MessageDAO.update(lastMessage);
+                            changeStateOfButtons(lastMessage);
+                            refreshTransactionList();
+                            // appeler ma méthode de création du fichier XML
+                        }
 
-                btn_answerMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        lastMessage.setStatut(Message.STATUT_ACCEPTE);
-                        MessageDAO.update(lastMessage);
-                        changeStateOfButtons(lastMessage);
-                        refreshTransactionList();
-                        // appeler ma méthode de création du fichier XML
-                    }
-
-                    private void refreshTransactionList() {
-                        List<Message> transactions = messages;
-                        List<String> transactionList = new ArrayList<>();
-                        transactions.forEach(t -> {
-                            Boolean noDemande = true;
-                            Boolean noDon = true;
-                            StringBuilder format = new StringBuilder();
-                            if (t.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)) {
-                                if (!t.getObjetsAsked().isEmpty()) {
-                                    noDemande = false;
-                                    t.getObjetsAsked().forEach(o -> {
-                                        format.append("Demande : ")
-                                                .append(o.getNom());
-                                    });
+                        private void refreshTransactionList() {
+                            List<Message> transactions = messages;
+                            List<String> transactionList = new ArrayList<>();
+                            transactions.forEach(t -> {
+                                Boolean noDemande = true;
+                                Boolean noDon = true;
+                                StringBuilder format = new StringBuilder();
+                                if (t.getStatut().equalsIgnoreCase(Message.STATUT_ACCEPTE)) {
+                                    if (!t.getObjetsAsked().isEmpty()) {
+                                        noDemande = false;
+                                        t.getObjetsAsked().forEach(o -> {
+                                            format.append("Demande : ")
+                                                    .append(o.getNom());
+                                        });
+                                    }
+                                    if (!t.getObjetsProposed().isEmpty()) {
+                                        noDon = false;
+                                        t.getObjetsProposed().forEach(o -> {
+                                            format.append(" / Don : ")
+                                                    .append(o.getNom());
+                                        });
+                                    }
+                                    if (!noDemande || !noDon) {
+                                        transactionList.add(format.toString());
+                                    }
                                 }
-                                if (!t.getObjetsProposed().isEmpty()) {
-                                    noDon = false;
-                                    t.getObjetsProposed().forEach(o -> {
-                                        format.append(" / Don : ")
-                                                .append(o.getNom());
-                                    });
-                                }
-                                if (!noDemande || !noDon) {
-                                    transactionList.add(format.toString());
-                                }
-                            }
-                        });
-                        transactionListProperty.set(FXCollections.observableArrayList(transactionList));
-                        transactionListView.itemsProperty().bind(transactionListProperty);
-                    }
-                });
+                            });
+                            transactionListProperty.set(FXCollections.observableArrayList(transactionList));
+                            transactionListView.itemsProperty().bind(transactionListProperty);
+                        }
+                    });
 
-                btn_CounterProposalMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        lastMessage.setStatut(Message.STATUT_CONTRE_PROPOSE);
-                        MessageDAO.update(lastMessage);
-                        changeStateOfButtons(lastMessage);
-                        // appeler ma méthode de création du fichier XML
-                    }
-                });
+                    btn_CounterProposalMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            lastMessage.setStatut(Message.STATUT_CONTRE_PROPOSE);
+                            MessageDAO.update(lastMessage);
+                            changeStateOfButtons(lastMessage);
+                            // appeler ma méthode de création du fichier XML
+                        }
+                    });
 
-                btn_markRead.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        lastMessage.setStatut(Message.STATUT_EN_ATTENTE);
-                        MessageDAO.update(lastMessage);
-                        changeStateOfButtons(lastMessage);
-                    }
-                });
+                    btn_markRead.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            lastMessage.setStatut(Message.STATUT_EN_ATTENTE);
+                            MessageDAO.update(lastMessage);
+                            changeStateOfButtons(lastMessage);
+                        }
+                    });
+                }
             }
 
             private void changeStateOfButtons(Message lastMessage) {

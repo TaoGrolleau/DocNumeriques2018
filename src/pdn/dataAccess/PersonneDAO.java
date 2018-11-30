@@ -56,11 +56,11 @@ public class PersonneDAO extends DatabaseController{
         return personne;
     }
     
-    public static int insererPersonne(String prenom, String nom, String mail){
+    public static int insererPersonne(String prenom, String nom, String mail, String date_autorisation){
         ResultSet rs;
         try {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("insert into personne (prenom, nom, email) values (" + prenom + ", " + nom + ", " + mail + ");");
+            rs = statement.executeQuery("insert into personne (prenom, nom, email, date_autorisation) values (" + prenom + ", " + nom + ", " + mail + ", " + date_autorisation + ");");
             return rs.getInt("numero_auto");
         } catch (SQLException ex) {
             Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, null, ex);

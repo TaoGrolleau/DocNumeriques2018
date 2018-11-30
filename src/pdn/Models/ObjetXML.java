@@ -31,15 +31,15 @@ public class ObjetXML {
 
     public ObjetXML() {
         messages = new ArrayList<>();
-        this.setIdFichier(String.valueOf(Math.random()));
+        this.idFichier = "1";
 
     }
 
-    public void CreateXmlFile(ObjetXML message) throws FileNotFoundException, UnsupportedEncodingException {
+    public void CreateXmlFile() throws FileNotFoundException, UnsupportedEncodingException {
         try (PrintWriter writer = new PrintWriter(pathFichier, "UTF-8")) {
             writer.println(CreateXmlHeader());
-            writer.println(CreateXmlMessage(message));
-            System.out.println(CreateXmlHeader()+CreateXmlMessage(message));
+            writer.println(CreateXmlMessage(this));
+            System.out.println(CreateXmlHeader() + CreateXmlMessage(this));
         }
     }
 
@@ -51,7 +51,7 @@ public class ObjetXML {
                 + "<NmIE>" + nomEm + "</NmIE>"
                 + "<NmIR>" + nomRecepteur + "</NmIR>"
                 + "<NumAuto>" + numAuthorisation + "</NumAuto>"
-                + "<DtOfSgtAuto>" + signatureAuthorisation.toString() + "</DtOfSgtAuto>"
+                + "<DtOfSgtAuto>" + signatureAuthorisation + "</DtOfSgtAuto>"
                 + "<DureeValidAuto>" + dureeValidite + "</DureeValidAuto>"
                 + "<MailDest>" + mailDestinataire + "</MailDest>"
                 + "<MailExp>" + mailExpediteur + "</MailExp>"
@@ -63,17 +63,17 @@ public class ObjetXML {
     public String CreateXmlMessage(ObjetXML message) {
         int i = 0;
         String startmessage = "<CollMess NbOfTxs=" + messages.size() + ">";
-        do {
-            startmessage = startmessage + "<Message MsgId=" + messages.get(i).getIdMessage() + ">"
-                    + "<Dte>" + messages.get(i).getDateMessage() + "</Dte>"
-                    + "<DureeValideMsg>" + messages.get(i).getDureeValiditeMessage() + "</DureeValideMsg>";
+        for (Message mess : this.messages) {
+            startmessage = startmessage + "<Message MsgId=" + mess.getIdMessage() + " ReponseA=" + mess.getIdMessageParent() + ">"
+                    + "<Dte>" + mess.getDateMessage() + "</Dte>"
+                    + "<DureeValideMsg>" + mess.getDureeValiditeMessage() + "</DureeValideMsg>";
 
-            startmessage = startmessage + CreateXmlProp(messages.get(i));
+            startmessage = startmessage + CreateXmlProp(mess);
 
             startmessage = startmessage + "</Message>";
 
             i++;
-        } while (messages.get(i) != null);
+        }
 
         return startmessage + "</CollMess></Body></fichier>";
 
@@ -89,47 +89,49 @@ public class ObjetXML {
                 result = result + "<Prop>"
                         + "<TitreP>" + m.getTitreProposition() + "</TitreP>"
                         + "<Offre>";
-                do {
-                    result = result + "<NomObjet>" + m.getObjetsProposed().get(i).getNom() + "</NomObjet>"
-                            + "<Type>" + m.getObjetsProposed().get(i).getType() + "</Type>"
+                for (Objet o : m.getObjetsProposed()) {
+                    result = result + "<NomObjet>" + o.getNom() + "</NomObjet>"
+                            + "<Type>" + o.getType() + "</Type>"
                             + "<Description>";
-                    do {
-                        //À corriger
+                    for (Description desc : o.getDescriptions()) //À corriger
+                    {
                         result = result + "<Parametre>"
-                                + "<Nom>" + m.getObjetsProposed().get(i).getDescriptions().toString() + "</Nom>"
-                                + "<Valeur>" + m.getObjetsProposed().get(i).getDescriptions().toString() + "</Valeur>"
+                                + "<Nom>" + desc.getNom() + "</Nom>"
+                                + "<Valeur>" + desc.getValeur() + "</Valeur>"
                                 + "</Parametre>";
-                    } while (m.getObjetsProposed().get(i).getDescriptions() != null);
+                    }
+                }
 
-                    result = result + "</Description>";
-                } while (m.getObjetsProposed().get(i) != null);
+                result = result + "</Description>";
+
                 result = result + "</Offre><Demande>";
-                do {
-                    result = result + "<NomObjet>" + m.getObjetsProposed().get(i).getNom() + "</NomObjet>"
-                            + "<Type>" + m.getObjetsProposed().get(i).getType() + "</Type>"
+                for (Objet o : m.getObjetsProposed()) {
+                    result = result + "<NomObjet>" + o.getNom() + "</NomObjet>"
+                            + "<Type>" + o.getType() + "</Type>"
                             + "<Description>";
-                    do {
+                    for (Description desc : o.getDescriptions()) {
                         //À corriger
                         result = result + "<Parametre>"
-                                + "<Nom>" + m.getObjetsProposed().get(i).getDescriptions().toString()/*Care*/ + "</Nom>"
-                                + "<Valeur>" + m.getObjetsProposed().get(i).getDescriptions().toString()/*Care*/ + "</Valeur>"
+                                + "<Nom>" + desc.getNom() + "</Nom>"
+                                + "<Valeur>" + desc.getValeur() + "</Valeur>"
                                 + "</Parametre>";
-                    } while (m.getObjetsProposed().get(i).getDescriptions() != null);
+                    }
                     result = result + "</Description>";
-                } while (m.getObjetsAsked().get(i) != null);
+                }
                 result = result + "</Demande></Prop>";
                 break;
             //On est dans une Acceptation de prop
+
             case "Accep":
                 //?
-                result = result +"";
+                result = result + "<Accep><MessageValid>Vu</MessageValid></Accep>";
                 break;
             //On est dans une acceptation d'autorisation
             case "Auth":
-                result = result + "<Auth>"
+                result = result + "<Auth><Rep>"
                         + m.getAcceptAuthorisation()
                         + m.getRefAuthorisation()
-                        + "</Auth>";
+                        + "</Rep></Auth>";
                 break;
             case "Dmd":
                 //On est dans une demande d'autorisation
