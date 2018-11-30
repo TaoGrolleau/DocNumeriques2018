@@ -89,6 +89,7 @@ public class DatabaseController {
             "    id_message INT PRIMARY KEY, " +
             "    id_message_parent INT, /* Optionnel */" +
             "    statut VARCHAR(20), " +
+            "    typeMessage VARCHAR(50), " +
             "    FOREIGN KEY (id_message_parent) REFERENCES message(id_message)" +
             ");");
         } catch (SQLException ex) {
@@ -250,18 +251,18 @@ public class DatabaseController {
         Statement statement;
         try {
             statement = connection.createStatement();
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (1, null, 'accepte'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (2, 1, 'contre_propose'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (3, 2, 'contre_propose'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (4, 3, 'non_lu'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (5, null, 'accepte'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (6, 5, 'accepte'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (7, 6, 'accepte'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (8, 7, 'non_lu'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (9, null, 'non_lu'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (10, null, 'accepte'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (11, 10, 'accepte'); ");
-            statement.execute("insert into message (id_message, id_message_parent, statut) values (12, 11, 'accepte'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (1, null, 'accepte', 'Demande D''authorisation'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (2, 1, 'contre_propose', 'Je veux faire un troc d''objets'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (3, 2, 'contre_propose', 'Je veux faire un troc d''objets'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (4, 3, 'non_lu', 'Je veux faire un troc d''objets'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (5, null, 'accepte', 'Demande D''authorisation'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (6, 5, 'accepte', 'Je veux faire un troc d''objets'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (7, 6, 'accepte', 'Accep'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (8, 7, 'non_lu', 'Je veux faire un troc d''objets'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (9, null, 'non_lu', 'Demande D''authorisation'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (10, null, 'accepte', 'Demande D''authorisation'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (11, 10, 'accepte', 'Je veux faire un troc d''objets'); ");
+            statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values (12, 11, 'non_lu', 'Accep'); ");
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseController.class.getName()).log(Level.SEVERE, "Impossible d'inserer des messages", ex);
         }
