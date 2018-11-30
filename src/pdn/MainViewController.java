@@ -25,6 +25,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
@@ -41,6 +43,14 @@ import pdn.dataAccess.PersonneDAO;
 public class MainViewController implements Initializable {
     
     private final String PATH = "././createdFiles/file.xml";
+    
+    @FXML
+    private TabPane tab_pane;
+    
+    @FXML
+    private Tab tab_createFile;
+    
+    private SingleSelectionModel<Tab> tabSelect;
 
     @FXML
     private TextField txt_path;
@@ -114,9 +124,6 @@ public class MainViewController implements Initializable {
 
     @FXML
     private Label messageMainTitle;
-    
-    @FXML
-    private Tab tab_createFile;
 
     ListProperty<String> contactListProperty = new SimpleListProperty<>();
     ListProperty<String> messageListProperty = new SimpleListProperty<>();
@@ -428,7 +435,6 @@ public class MainViewController implements Initializable {
                             
                             ObjetXML objetXML = new ObjetXML();
                             try {
-                                // appeler ma méthode de création du fichier XML
                                 objetXML.setNomEm(Personne.NOM);
                                 objetXML.setNomRecepteur(personneSelected.toString());
                                 objetXML.setNumAuthorisation(personneSelected.getNumeroAuthorisation().toString());
@@ -438,7 +444,12 @@ public class MainViewController implements Initializable {
                                 objetXML.setMailExpediteur(Personne.EMAIL);
                                 objetXML.setPathFichier(PATH);
                                 Message reponse = new Message();
-                                reponse.setTypeMessage("Accep");
+                                if(lastMessage.getTypeMessage().equalsIgnoreCase("Demande D'authorisation")){
+                                    reponse.setTypeMessage("Auth");
+                                } else {
+                                    reponse.setTypeMessage("Accep");
+                                }
+                                reponse.setStatut(Message.STATUT_ACCEPTE);
                                 messages.add(reponse);
                                 objetXML.setMessages(messages);
                                 objetXML.CreateXmlFile();
@@ -482,7 +493,7 @@ public class MainViewController implements Initializable {
                             transactionListView.itemsProperty().bind(transactionListProperty);
                         }
                     });
-
+                    
                     btn_CounterProposalMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
@@ -490,7 +501,8 @@ public class MainViewController implements Initializable {
                             MessageDAO.update(lastMessage);
                             changeStateOfButtons(lastMessage);
                             // ouvrir l'onglet pour répondre
-                            // selectionner par défaut la contre propostition (radiobutton)
+                            tab_pane.getSelectionModel().select(tab_createFile);
+//                            tabSelect.select(tab_createFile);
                             // sélectionner par défaut le contact
                         }
                     });

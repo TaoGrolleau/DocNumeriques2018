@@ -63,6 +63,11 @@ public class ObjetXML {
     public String CreateXmlMessage(ObjetXML message) {
         int i = 0;
         String startmessage = "<CollMess NbOfTxs=" + messages.size() + ">";
+        
+        for (Message mess : this.messages) {
+            System.out.println("mess : " + mess.getIdMessage() + " " + mess.getTypeMessage());
+        }
+        
         for (Message mess : this.messages) {
             startmessage = startmessage + "<Message MsgId=" + mess.getIdMessage() + " ReponseA=" + mess.getIdMessageParent() + ">"
                     + "<Dte>" + mess.getDateMessage() + "</Dte>"
@@ -84,7 +89,9 @@ public class ObjetXML {
         String result = "";
 
         switch (m.typeMessage) {
-            case "Prop":
+            case "Je veux donner des objets":
+            case "Je veux demander des objets":
+            case "Je veux faire un troc d'objets":
                 //On est dans une proposition
                 result = result + "<Prop>"
                         + "<TitreP>" + m.getTitreProposition() + "</TitreP>"
@@ -105,7 +112,7 @@ public class ObjetXML {
                 result = result + "</Description>";
 
                 result = result + "</Offre><Demande>";
-                for (Objet o : m.getObjetsProposed()) {
+                for (Objet o : m.getObjetsAsked()) {
                     result = result + "<NomObjet>" + o.getNom() + "</NomObjet>"
                             + "<Type>" + o.getType() + "</Type>"
                             + "<Description>";
@@ -133,12 +140,12 @@ public class ObjetXML {
                         + m.getRefAuthorisation()
                         + "</Rep></Auth>";
                 break;
-            case "Dmd":
+            case "Demande D'authorisation":
                 //On est dans une demande d'autorisation
                 result = result + "<Dmd>"
                         + "<DescDmd>" + m.getDescriptionDemande() + "</DescDmd>"
-                        + "<DateDebut>" + m.getDebutDemande().toString() + "</DateDebut>"
-                        + "<DateFin>" + m.getFinDemande().toString() + "</DateFin>";
+                        + "<DateDebut>" + m.getDebutDemande() + "</DateDebut>"
+                        + "<DateFin>" + m.getFinDemande() + "</DateFin>";
                 break;
             default:
                 break;

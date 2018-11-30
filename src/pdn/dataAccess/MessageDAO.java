@@ -18,7 +18,7 @@ public class MessageDAO extends DatabaseController{
         List<Message> messages = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT m.id_message, m.id_message_parent, m.statut " +
+            ResultSet rs = statement.executeQuery("SELECT m.id_message, m.id_message_parent, m.statut, m.typeMessage " +
                     "FROM message m, messages_a_personne mp " +
                     "WHERE mp.id_personne_ref = " + numeroAuthoristion + " " +
                     "AND mp.id_message_ref = m.id_message;");
@@ -28,6 +28,7 @@ public class MessageDAO extends DatabaseController{
                 message.setIdMessage(rs.getInt("id_message"));
                 message.setIdMessageParent(rs.getInt("id_message_parent"));
                 message.setStatut(rs.getString("statut"));
+                message.setTypeMessage(rs.getString("typeMessage"));
                 
                 messages.add(message);
             }
@@ -38,11 +39,12 @@ public class MessageDAO extends DatabaseController{
     }
     
      public static void update(Message m) {
-        String sql = "UPDATE message SET statut = ? ; ";
+        String sql = "UPDATE message SET statut = ? WHERE id_message = ?; ";
  
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
  
             pstmt.setString(1, m.getStatut());
+            pstmt.setLong(2, m.getIdMessage());
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, "update error", ex);
