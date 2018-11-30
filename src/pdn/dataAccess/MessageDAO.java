@@ -49,13 +49,13 @@ public class MessageDAO extends DatabaseController{
         }
     }
      
-     public static void insererMessage(Long idMessage, Long idMessageParent){
+     public static void insererMessage(Long idMessage, Long idMessageParent, String type){
         try {
             Statement statement = connection.createStatement();
             if(idMessageParent != null)
-                statement.execute("insert into message (id_message, id_message_parent, statut) values ("+ idMessage + ", "+ idMessageParent +", 'non_lu'); ");
+                statement.execute("insert into message (id_message, id_message_parent, statut, type_message) values ("+ idMessage + ", "+ idMessageParent +", 'non_lu', " + type + "); ");
         else
-                statement.execute("insert into message (id_message, statut) values ("+ idMessage + ", 'non_lu'); ");
+                statement.execute("insert into message (id_message, statut, type_message) values ("+ idMessage + ", 'non_lu', "+ type +"); ");
         } catch (SQLException ex) {
             Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

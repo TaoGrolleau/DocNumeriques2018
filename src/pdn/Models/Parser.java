@@ -405,7 +405,7 @@ public class Parser {
             messages = (ArrayList<Message>) personne.getMessages();
             for (Message message : this.fichier.getMessages()) {
                 if (!messages.contains(message)) {
-                    MessageDAO.insererMessage(message.getIdMessage(), message.getIdMessageParent());
+                    MessageDAO.insererMessage(message.getIdMessage(), message.getIdMessageParent(), message.getTypeMessage());
                     MessageDAO.associerMessagePersonne(message.getIdMessage(), personne.getNumeroAuthorisation());
                     for (Objet o : message.getObjetsProposed()) {
                         idObjet = ObjetDAO.insererObjet(o.getNom(), o.getType());
@@ -429,7 +429,7 @@ public class Parser {
             String[] nomComplet = this.fichier.getNomEm().split(" ");
             int idPersonne = PersonneDAO.insererPersonne(nomComplet[0], nomComplet[1], this.fichier.getMailExpediteur(), this.fichier.getSignatureAuthorisation().toString());
             Message message = this.fichier.getMessages().get(0);
-            MessageDAO.insererMessage(message.getIdMessage(), message.getIdMessageParent());
+            MessageDAO.insererMessage(message.getIdMessage(), message.getIdMessageParent(), message.getTypeMessage());
             MessageDAO.associerMessagePersonne(message.getIdMessage(), idPersonne);
         } else {
             return false;
