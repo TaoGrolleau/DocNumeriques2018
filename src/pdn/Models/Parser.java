@@ -29,6 +29,7 @@ public class Parser {
     }
 
     public void parsingFichier(String path) {
+        System.out.print("ici ?");
         this.noAuth = false;
         this.fichier = new ObjetXML();
         DocumentBuilderFactory fabrique = DocumentBuilderFactory.newInstance();
@@ -40,6 +41,7 @@ public class Parser {
             }
             constructeur = fabrique.newDocumentBuilder();
             Document document = (Document) constructeur.parse(xml);
+            System.out.print("Fichier conforme a la DTD...");
             if (document.getElementsByTagName("FicID").item(0) != null) {
                 this.fichier.setIdFichier(document.getElementsByTagName("FicID").item(0).getTextContent());
             } else {
@@ -392,9 +394,10 @@ public class Parser {
                 throw new IOException();
             }
         } catch (ParserConfigurationException | SAXException | IOException | ParseException ex) {
+            System.out.print("fichier non conforme : supprimé");
             xml.delete();
         }
-
+        System.out.println("Parsing terminer");
     }
 
     public boolean XmlABaseDeDonnee() { //true si l'insertion a fonctionne, false si il faut supprimer le fichier

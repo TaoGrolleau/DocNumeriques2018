@@ -1,8 +1,9 @@
 package pdn;
 
+import pdn.Models.Parser;
+
 import java.io.IOException;
 import java.nio.file.*;
-
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
@@ -31,9 +32,13 @@ public class DirectoryWatch {
                 WatchKey key = myWatcher.take();
                 while (key != null) {
                     for (WatchEvent event : key.pollEvents()) {
-                        //Lancer le scan du fichier ici.
                         System.out.printf("Received %s event for file: %s\n",
                                 event.kind(), event.context());
+                        if(event.kind() == ENTRY_CREATE){
+                            Parser parse = new Parser();
+                            System.out.print("début du parsing");
+                            parse.parsingFichier((String) event.context());
+                        }
                     }
                     key.reset();
                     key = myWatcher.take();
