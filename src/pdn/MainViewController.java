@@ -500,10 +500,8 @@ public class MainViewController implements Initializable {
                             lastMessage.setStatut(Message.STATUT_CONTRE_PROPOSE);
                             MessageDAO.update(lastMessage);
                             changeStateOfButtons(lastMessage);
-                            // ouvrir l'onglet pour répondre
                             tab_pane.getSelectionModel().select(tab_createFile);
-//                            tabSelect.select(tab_createFile);
-                            // sélectionner par défaut le contact
+                            contacts.getSelectionModel().select(contactListView.getSelectionModel().getSelectedIndex());
                         }
                     });
 
