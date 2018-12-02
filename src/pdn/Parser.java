@@ -1,4 +1,4 @@
-package pdn.Models;
+package pdn;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +14,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import pdn.Models.Description;
+import pdn.Models.Message;
+import pdn.Models.Objet;
+import pdn.Models.ObjetXML;
+import pdn.Models.Personne;
 import pdn.dataAccess.DescriptionDAO;
 import pdn.dataAccess.MessageDAO;
 import pdn.dataAccess.ObjetDAO;

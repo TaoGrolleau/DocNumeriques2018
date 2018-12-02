@@ -1,8 +1,5 @@
 package pdn;
 
-import pdn.Models.Parser;
-
-import java.io.IOException;
 import java.nio.file.*;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
@@ -12,7 +9,7 @@ import javafx.concurrent.Task;
 public class DirectoryWatch {
 
     public static Thread threadFileWatcher;
-
+    
     public static void StartFileWatcherThread(String path) throws Exception {
         Path fileDir = Paths.get(path);
         if (fileDir == null) {

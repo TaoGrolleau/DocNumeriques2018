@@ -16,22 +16,19 @@ public class Message implements Serializable {
 
     private long idMessage;
     private long idMessageParent;
-    List<Objet> objetsProposed;
-    List<Objet> objetsAsked;
+    private List<Objet> objetsProposed;
+    private List<Objet> objetsAsked;
     private String statut;
-    Date dateMessage;
-    int dureeValiditeMessage;
-    String typeMessage;
-
-    String AcceptAuthorisation;
-    String RefAuthorisation;
-
-    String MessageReponse;
-
-    String descriptionDemande;
-    Date debutDemande;
-    Date finDemande;
-    String titreProposition;
+    private Date dateMessage;
+    private int dureeValiditeMessage;
+    private String typeMessage;
+    private String AcceptAuthorisation;
+    private String RefAuthorisation;
+    private String MessageReponse;
+    private String descriptionDemande;
+    private Date debutDemande;
+    private Date finDemande;
+    private String titreProposition;
 
     public Message() {
         objetsProposed = new ArrayList<>();
