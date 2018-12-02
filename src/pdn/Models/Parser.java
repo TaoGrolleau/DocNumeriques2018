@@ -27,6 +27,10 @@ public class Parser {
     public Parser() {
 
     }
+    
+    public void test(String path){
+        System.out.println(path);
+    }
 
     public void parsingFichier(String path) {
         System.out.print("ici ?");

@@ -11,12 +11,7 @@ import javafx.concurrent.Task;
 
 public class DirectoryWatch {
 
-
     public static Thread threadFileWatcher;
-
-    public static void main(String[] args) {
-
-    }
 
     public static void StartFileWatcherThread(String path) throws Exception {
         Path fileDir = Paths.get(path);
@@ -34,10 +29,17 @@ public class DirectoryWatch {
                     for (WatchEvent event : key.pollEvents()) {
                         System.out.printf("Received %s event for file: %s\n",
                                 event.kind(), event.context());
-                        if(event.kind() == ENTRY_CREATE){
-                            Parser parse = new Parser();
-                            System.out.print("début du parsing");
-                            parse.parsingFichier((String) event.context());
+                        if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
+                            //On récupère le chemin du dossier
+                            Path directory = (Path) key.watchable();
+                            //On récupère l'event
+                            WatchEvent<Path> ev = (WatchEvent<Path>) event;
+                            //On récupère le chemin du fichier
+                            Path fullPath = directory.resolve(ev.context());
+                            //On créé le parser
+                            Parser parser = new Parser();
+                            //On appelle la méthode pour parser le fichier
+                            parser.parsingFichier(fullPath.toString());
                         }
                     }
                     key.reset();

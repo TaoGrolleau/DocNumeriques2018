@@ -145,7 +145,6 @@ public class MainViewController implements Initializable {
         btn_path.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                System.out.println("You clicked me!");
                 String newPath = txt_path.getText();
                 System.out.println(newPath);
 
