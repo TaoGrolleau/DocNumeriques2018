@@ -10,22 +10,22 @@ import java.util.logging.Logger;
 import pdn.DatabaseController;
 import pdn.Models.Personne;
 
-public class PersonneDAO extends DatabaseController{
-    
-    public static List<Personne> getAllPersonne(){
+public class PersonneDAO extends DatabaseController {
+
+    public static List<Personne> getAllPersonne() {
         List<Personne> personnes = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * from personne");
             while (rs.next()) {
-                
+
                 Personne personne = new Personne();
                 personne.setNumeroAuthorisation(rs.getInt("numero_auto"));
                 personne.setDate(rs.getString("date_autorisation"));
                 personne.setNom(rs.getString("nom"));
                 personne.setPrenom(rs.getString("prenom"));
                 personne.setEmail(rs.getString("email"));
-                
+
                 personnes.add(personne);
             }
         } catch (SQLException ex) {
@@ -39,11 +39,11 @@ public class PersonneDAO extends DatabaseController{
         String[] nomComplet = newValue.split(" ");
         try {
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * from personne " + 
-                    "WHERE prenom LIKE '%" + nomComplet[0] + 
-                    "' AND nom LIKE '%" + nomComplet[1] + "';");
+            ResultSet rs = statement.executeQuery("SELECT * from personne "
+                    + "WHERE prenom LIKE '%" + nomComplet[0]
+                    + "' AND nom LIKE '%" + nomComplet[1] + "';");
             while (rs.next()) {
-                
+
                 personne.setNumeroAuthorisation(rs.getInt("numero_auto"));
                 personne.setDate(rs.getString("date_autorisation"));
                 personne.setNom(rs.getString("nom"));
@@ -55,12 +55,13 @@ public class PersonneDAO extends DatabaseController{
         }
         return personne;
     }
-    
-    public static int insererPersonne(String prenom, String nom, String mail, String date_autorisation){
+
+    public static int insererPersonne(String prenom, String nom, String mail, String date_autorisation) {
         ResultSet rs;
         try {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("insert into personne (prenom, nom, email, date_autorisation) values (" + prenom + ", " + nom + ", " + mail + ", " + date_autorisation + ");");
+            statement.execute("insert into personne (prenom, nom, email) values (\'" + prenom + "\', \'" + nom + "\', \'" + mail +"\');");
+            rs = statement.executeQuery("select numero_auto from personne where prenom=\'" + prenom + "\' and nom=\'" + nom +"\' and email=\'" + mail + "\';");
             return rs.getInt("numero_auto");
         } catch (SQLException ex) {
             Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, null, ex);

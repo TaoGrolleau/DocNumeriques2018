@@ -1,4 +1,4 @@
-<!DOCTYPE troc [
+<!DOCTYPE troc>
     <!ELEMENT Fichier(Header, Body)>
         <!ELEMENT Header(FicID, NmIE, NmIR, NumAuto?, DtOfSgutAuto?, DureeValidAuto?, MailDest?, MailExp?)>
         <!-- Les balises liés à l'autorisation sont optionnelle : 2 cas se présentent :

@@ -55,9 +55,9 @@ public class MessageDAO extends DatabaseController{
         try {
             Statement statement = connection.createStatement();
             if(idMessageParent != null)
-                statement.execute("insert into message (id_message, id_message_parent, statut, type_message) values ("+ idMessage + ", "+ idMessageParent +", 'non_lu', " + type + "); ");
+                statement.execute("insert into message (id_message, id_message_parent, statut, typeMessage) values ("+ idMessage + ", "+ idMessageParent +", 'non_lu', \'" + type + "\'); ");
         else
-                statement.execute("insert into message (id_message, statut, type_message) values ("+ idMessage + ", 'non_lu', "+ type +"); ");
+                statement.execute("insert into message (id_message, statut, typeMessage) values ("+ idMessage + ", 'non_lu', \'"+ type +"\'); ");
         } catch (SQLException ex) {
             Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -67,7 +67,7 @@ public class MessageDAO extends DatabaseController{
         Statement statement;
         try {
             statement = connection.createStatement();
-            statement.execute("insert into message_a_personne values (" + idPersonne + ", " + idMessage + ");" );
+            statement.execute("insert into messages_a_personne values (" + idPersonne + ", " + idMessage + ");" );
         } catch (SQLException ex) {
             Logger.getLogger(ObjetDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

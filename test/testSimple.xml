@@ -1,18 +1,18 @@
-<!DOCTYPE fichier SYSTEM "./Groupe_dtd.dtd">
+<!DOCTYPE fichier>
 <fichier>
 <Header>
   <FicID> 789 </FicID>
-  <NmIE> Dieu </NmIE>
-  <NmIR> Humanité </NmIR>
-  <NumAuto> 0 </NumAuto>
+  <NmIE>Dieu lePere</NmIE>
+  <NmIR>Eudes DeLaBuissoniere</NmIR>
+  <NumAuto></NumAuto>
   <DtOfSgtAuto> 08/11/2018 </DtOfSgtAuto>
-  <DureeValidAuto> 0 </DureeValidAuto>
-  <MailDest> Dieu@laposte.net </MailDest>
-  <MailExp> Humanite@yahoo.fr </MailExp>
+  <DureeValidAuto></DureeValidAuto>
+  <MailDest>Dieu@laposte.net</MailDest>
+  <MailExp>Humanite@yahoo.fr</MailExp>
 </Header>
 <Body>
-  <CollMess NbOfTxs=1>
-    <Message MsgId=15268>
+  <CollMess NbOfTxs="1">
+    <Message MsgId="15268">
       <Dte> 08/11/2018 </Dte>
       <DureeValideMsg> 10 </DureeValideMsg>
       <Dmd>

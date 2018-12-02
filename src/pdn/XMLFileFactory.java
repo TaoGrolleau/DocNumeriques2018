@@ -19,7 +19,7 @@ public class XMLFileFactory {
     }
 
     public String CreateXmlHeader(ObjetXML objetXML) {
-        String header = "<!DOCTYPE fichier SYSTEM \"./Groupe_dtd.dtd\">"
+        String header = "<!DOCTYPE fichier>"
                 + "<fichier>"
                 + "<Header>"
                 + "<FicID>" + objetXML.getIdFichier() + "</FicID>"
