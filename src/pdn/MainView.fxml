@@ -194,7 +194,7 @@
                                        <children>
                                           <Label text="Votre nom:" />
                                           <Label text="Nom du nouveau contact" GridPane.rowIndex="4" />
-                                          <TextField fx:id="nameSender" editable="false" text="Eudes Delabuissonniere" GridPane.rowIndex="1">
+                                          <TextField fx:id="nameSender" editable="false" GridPane.rowIndex="1">
                                              <GridPane.margin>
                                                 <Insets left="10.0" right="10.0" />
                                              </GridPane.margin></TextField>
@@ -213,7 +213,7 @@
                                           <TextField fx:id="pathMessageCreated" promptText="Path..." GridPane.rowIndex="13" />
                                           <Label text="Votre email:" GridPane.rowIndex="2" />
                                           <Label text="Email du nouveau contact:" GridPane.rowIndex="6" />
-                                          <TextField fx:id="emailSender" editable="false" text="eudes.delabuissonniere@gmail.com" GridPane.rowIndex="3">
+                                          <TextField fx:id="emailSender" editable="false" GridPane.rowIndex="3">
                                              <GridPane.margin>
                                                 <Insets left="10.0" right="10.0" />
                                              </GridPane.margin>
