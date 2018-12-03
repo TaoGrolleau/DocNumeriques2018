@@ -39,7 +39,7 @@ public class XMLFileFactory {
         int i = 0;
         String startmessage = "<CollMess NbOfTxs=\"" + message.getMessages().size() + "\">";
         for (Message mess : message.getMessages()) {
-            startmessage = startmessage + "<Message MsgId=\"" + mess.getIdMessage() + "\' ReponseA=\'" + mess.getIdMessageParent() + "\">"
+            startmessage = startmessage + "<Message MsgId=\"" + mess.getIdMessage() + "\" ReponseA=\"" + mess.getIdMessageParent() + "\">"
                     + "<Dte>" + mess.getDateMessage() + "</Dte>"
                     + "<DureeValideMsg>" + mess.getDureeValiditeMessage() + "</DureeValideMsg>";
 
