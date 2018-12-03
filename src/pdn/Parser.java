@@ -71,13 +71,13 @@ public class Parser {
                 System.out.print("Pas de nom de destinataire");
                 throw new IOException();
             }
-            if (!document.getElementsByTagName("NumAuto").item(0).getTextContent().equals("null")) {
+            if (!document.getElementsByTagName("NumAuto").item(0).getTextContent().equals("null") && !document.getElementsByTagName("NumAuto").item(0).getTextContent().equals("")) {
                 this.fichier.setNumAuthorisation(document.getElementsByTagName("NumAuto").item(0).getTextContent());
             } else {
                 System.out.println("c'est une demande d'autorisation");
                 this.noAuth = true;
             }
-            if (!document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().equals("null") && !this.noAuth) {
+            if (!document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().equals("null") && !document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().equals("") && !this.noAuth) {
                 this.fichier.setDureeValidite(Integer.parseInt(document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().trim()));
             } else if (!this.noAuth) {
                 System.out.print("Pas de duree de validite");
@@ -151,7 +151,9 @@ public class Parser {
                         message.setIdMessage(Integer.parseInt(messageEnCours.getAttribute("MsgId").trim()));
                     }
                     if (messageEnCours.hasAttribute("ReponseA")) {
-                        message.setIdMessageParent(Integer.parseInt(messageEnCours.getAttribute("ReponseA").trim()));
+                        if (!messageEnCours.getAttribute("ReponseA").trim().equals("null") && !messageEnCours.getAttribute("ReponseA").trim().equals("")) {
+                            message.setIdMessageParent(Integer.parseInt(messageEnCours.getAttribute("ReponseA").trim()));
+                        }
                     }
                     if (!messageEnCours.getElementsByTagName("Dte").item(0).getTextContent().equals("")) {
                         message.setDateMessage(messageEnCours.getElementsByTagName("Dte").item(0).getTextContent());
@@ -450,7 +452,12 @@ public class Parser {
             String dateSignatureAutorisation = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
             int idPersonne = PersonneDAO.insererPersonne(nomComplet[0], nomComplet[1], this.fichier.getMailExpediteur(), dateSignatureAutorisation);
             Message message = this.fichier.getMessages().get(0);
-            idMessage = MessageDAO.insererMessage(message.getIdMessageParent(), message.getTypeMessage());
+            if (message.getIdMessageParent() == 0) {
+                idMessage = MessageDAO.insererMessage(null, message.getTypeMessage());
+            }
+            else{
+                idMessage = MessageDAO.insererMessage(message.getIdMessageParent(), message.getTypeMessage());
+            }
             MessageDAO.associerMessagePersonne(idMessage, idPersonne);
         } else {
             return false;

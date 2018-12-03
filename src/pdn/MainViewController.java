@@ -318,7 +318,7 @@ public class MainViewController implements Initializable {
 
                 if (!contacts.getSelectionModel().isEmpty()) {
                     Personne contact = PersonneDAO.getPersonneWithName(contacts.getSelectionModel().getSelectedItem().toString());
-                    objetXml.setNomRecepteur(contact.getNom());
+                    objetXml.setNomRecepteur(contact.getPrenom()+ " "+contact.getNom());
                     objetXml.setMailDestinataire(contact.getEmail());
                     objetXml.setNumAuthorisation(contact.getNumeroAuthorisation().toString());
                     objetXml.setSignatureAuthorisation(contact.getSignatureAuthorisation());
