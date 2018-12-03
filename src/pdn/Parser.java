@@ -151,7 +151,9 @@ public class Parser {
                         message.setIdMessage(Integer.parseInt(messageEnCours.getAttribute("MsgId").trim()));
                     }
                     if (messageEnCours.hasAttribute("ReponseA")) {
-                        message.setIdMessageParent(Integer.parseInt(messageEnCours.getAttribute("ReponseA").trim()));
+                        if (!messageEnCours.getAttribute("ReponseA").trim().equals("null")) {
+                            message.setIdMessageParent(Integer.parseInt(messageEnCours.getAttribute("ReponseA").trim()));
+                        }
                     }
                     if (!messageEnCours.getElementsByTagName("Dte").item(0).getTextContent().equals("")) {
                         message.setDateMessage(messageEnCours.getElementsByTagName("Dte").item(0).getTextContent());
@@ -450,7 +452,12 @@ public class Parser {
             String dateSignatureAutorisation = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
             int idPersonne = PersonneDAO.insererPersonne(nomComplet[0], nomComplet[1], this.fichier.getMailExpediteur(), dateSignatureAutorisation);
             Message message = this.fichier.getMessages().get(0);
-            idMessage = MessageDAO.insererMessage(message.getIdMessageParent(), message.getTypeMessage());
+            if (message.getIdMessageParent() == 0) {
+                idMessage = MessageDAO.insererMessage(null, message.getTypeMessage());
+            }
+            else{
+                idMessage = MessageDAO.insererMessage(message.getIdMessageParent(), message.getTypeMessage());
+            }
             MessageDAO.associerMessagePersonne(idMessage, idPersonne);
         } else {
             return false;
