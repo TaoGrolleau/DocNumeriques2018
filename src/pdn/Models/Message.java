@@ -19,7 +19,7 @@ public class Message implements Serializable {
     private List<Objet> objetsProposed;
     private List<Objet> objetsAsked;
     private String statut;
-    private Date dateMessage;
+    private String dateMessage;
     private int dureeValiditeMessage;
     private String typeMessage;
     private String AcceptAuthorisation;

@@ -252,7 +252,7 @@ public class MainViewController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 Message newMessage = new Message();
-                Date dateSignature = new Date();
+                String dateMessage = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
                 selectedtypeMessage = (RadioButton) radiobtn_typeMessage.getSelectedToggle();
 
                 List<Objet> objectsProposed = new ArrayList<>();
@@ -267,7 +267,7 @@ public class MainViewController implements Initializable {
                 newMessage.setObjetsProposed(objectsProposed);
                 newMessage.setObjetsAsked(objectsAsked);
 
-                newMessage.setDateMessage(dateSignature);
+                newMessage.setDateMessage(dateMessage);
                 newMessage.setDureeValiditeMessage(14);
 
                 newMessage.setTypeMessage(typeMessage);
@@ -292,16 +292,17 @@ public class MainViewController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 ObjetXML objetXml = new ObjetXML();
-                DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                Date dateSignature = new Date();
+                String dateMessage = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
                 selectedtypeMessage = (RadioButton) radiobtn_typeMessage.getSelectedToggle();
 
                 if (selectedtypeMessage.getText().equals("Demande D'authorisation")) {
                     Message newMessage = new Message();
-                    newMessage.setDateMessage(dateSignature);
+                    newMessage.setDateMessage(dateMessage);
+
                     newMessage.setDureeValiditeMessage(14);
                     newMessage.setTypeMessage(selectedtypeMessage.getText());
-
+                    int idMessage = MessageDAO.insererMessage(null, "auth");
+                    newMessage.setIdMessage(idMessage);
                     String field_nameContact = nameContact.getText();
                     String field_mailContact = emailContact.getText();
                     objetXml.setNomRecepteur(field_nameContact);

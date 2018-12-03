@@ -37,9 +37,9 @@ public class XMLFileFactory {
 
     public String CreateXmlMessage(ObjetXML message) {
         int i = 0;
-        String startmessage = "<CollMess NbOfTxs=" + message.getMessages().size() + ">";
+        String startmessage = "<CollMess NbOfTxs=\"" + message.getMessages().size() + "\">";
         for (Message mess : message.getMessages()) {
-            startmessage = startmessage + "<Message MsgId=" + mess.getIdMessage() + " ReponseA=" + mess.getIdMessageParent() + ">"
+            startmessage = startmessage + "<Message MsgId=\"" + mess.getIdMessage() + "\' ReponseA=\'" + mess.getIdMessageParent() + "\">"
                     + "<Dte>" + mess.getDateMessage() + "</Dte>"
                     + "<DureeValideMsg>" + mess.getDureeValiditeMessage() + "</DureeValideMsg>";
 
@@ -115,7 +115,8 @@ public class XMLFileFactory {
                 result = result + "<Dmd>"
                         + "<DescDmd>" + m.getDescriptionDemande() + "</DescDmd>"
                         + "<DateDebut>" + m.getDebutDemande() + "</DateDebut>"
-                        + "<DateFin>" + m.getFinDemande() + "</DateFin>";
+                        + "<DateFin>" + m.getFinDemande() + "</DateFin>"
+                        + "</Dmd>";
                 break;
             default:
                 break;

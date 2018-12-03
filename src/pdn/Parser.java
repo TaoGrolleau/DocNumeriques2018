@@ -109,7 +109,7 @@ public class Parser {
                 messageEnCours = (Element) liste.item(0);
                 if (!messageEnCours.getElementsByTagName("Dte").item(0).getTextContent().equals("")) {
                     date = messageEnCours.getElementsByTagName("Dte").item(0).getTextContent();
-                    message.setDateMessage((Date) new SimpleDateFormat("dd/mm/yyyy").parse(date));
+                    message.setDateMessage(date);
                 } else {
                     System.out.println("Pas de date");
                     throw new IOException();
@@ -174,7 +174,7 @@ public class Parser {
                         message.setIdMessageParent(Integer.parseInt(messageEnCours.getAttribute("ReponseA").trim()));
                     }
                     if (!messageEnCours.getElementsByTagName("Dte").item(0).getTextContent().equals("")) {
-                        message.setDateMessage((Date) new SimpleDateFormat("dd/mm/yyyy").parse(messageEnCours.getElementsByTagName("Dte").item(0).getTextContent()));
+                        message.setDateMessage(messageEnCours.getElementsByTagName("Dte").item(0).getTextContent());
                     } else {
                         throw new IOException();
                     }
