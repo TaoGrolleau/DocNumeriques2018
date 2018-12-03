@@ -265,6 +265,8 @@ public class MainViewController implements Initializable {
 
                 newMessage.setTypeMessage(typeMessage);
                 newMessage.setTitreProposition(field_titleProposition);
+                int idMessage = MessageDAO.insererMessage(null, typeMessage);
+                newMessage.setIdMessage(idMessage);
 
                 messages.add(newMessage);
                 listObjetProposed.clear();
