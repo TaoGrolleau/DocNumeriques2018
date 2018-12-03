@@ -129,7 +129,7 @@ public class Parser {
                 }
                 Calendar today = Calendar.getInstance();
                 Calendar c = Calendar.getInstance();
-                c.setTime(message.getDateMessage());
+                c.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(message.getDateMessage()));
                 c.add(Calendar.DATE, message.getDureeValiditeMessage());
                 if (today.before(c)) {
                     System.out.println("Message perimé");
@@ -137,27 +137,6 @@ public class Parser {
                 }
                 if (messageEnCours.hasAttribute("MsgId")) {
                     message.setIdMessage(Integer.parseInt(messageEnCours.getAttribute("MsgId").trim()));
-                }
-                if (!messageEnCours.getElementsByTagName("Dmd").item(0).getTextContent().equals("")) {
-                    message.setTypeMessage("Dmd");
-                    type = (Element) messageEnCours.getElementsByTagName("Dmd").item(0);
-                    if (!type.getElementsByTagName("DescDmd").item(0).getTextContent().equals("")) {
-                        message.setDescriptionDemande(type.getElementsByTagName("DescDmd").item(0).getTextContent());
-                    } else {
-                        throw new IOException();
-                    }
-                    if (!type.getElementsByTagName("DateDebut").item(0).getTextContent().equals("")) {
-                        message.setDebutDemande((Date) new SimpleDateFormat("dd/MM/yyyy").parse(type.getElementsByTagName("DateDebut").item(0).getTextContent()));
-                    } else {
-                        throw new IOException();
-                    }
-                    if (!type.getElementsByTagName("DateFin").item(0).getTextContent().equals("")) {
-                        message.setFinDemande((Date) new SimpleDateFormat("dd/MM/yyyy").parse(type.getElementsByTagName("DateFin").item(0).getTextContent()));
-                    } else {
-                        throw new IOException();
-                    }
-                } else {
-                    throw new IOException();
                 }
                 System.out.println("ajout du message au fichier");
                 this.fichier.getMessages().add(message);
@@ -444,7 +423,7 @@ public class Parser {
             messages = (ArrayList<Message>) personne.getMessages();
             for (Message message : this.fichier.getMessages()) {
                 if (!messages.contains(message)) {
-                    idMessage=MessageDAO.insererMessage(message.getIdMessageParent(), message.getTypeMessage());
+                    idMessage = MessageDAO.insererMessage(message.getIdMessageParent(), message.getTypeMessage());
                     MessageDAO.associerMessagePersonne(idMessage, personne.getNumeroAuthorisation());
                     for (Objet o : message.getObjetsProposed()) {
                         idObjet = ObjetDAO.insererObjet(o.getNom(), o.getType());
@@ -470,7 +449,7 @@ public class Parser {
             String dateSignatureAutorisation = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
             int idPersonne = PersonneDAO.insererPersonne(nomComplet[0], nomComplet[1], this.fichier.getMailExpediteur(), dateSignatureAutorisation);
             Message message = this.fichier.getMessages().get(0);
-            idMessage=MessageDAO.insererMessage(message.getIdMessageParent(), message.getTypeMessage());
+            idMessage = MessageDAO.insererMessage(message.getIdMessageParent(), message.getTypeMessage());
             MessageDAO.associerMessagePersonne(idMessage, idPersonne);
         } else {
             return false;
