@@ -34,5 +34,10 @@ public class Message implements Serializable {
         objetsProposed = new ArrayList<>();
         objetsAsked = new ArrayList<>();
     }
+    
+    @Override
+    public String toString(){
+        return "Proposition: " + this.titreProposition + ", \nObjets proposés: " + this.objetsProposed + ",\nObjets demandés: " + this.objetsAsked;
+    }
 
 }
