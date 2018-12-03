@@ -301,7 +301,6 @@ public class MainViewController implements Initializable {
 
                 List<Message> finalMessages = new ArrayList<>();
                 finalMessages.addAll(messages);
-
                 String field_pathFile = pathMessageCreated.getText();
                 objetXml.setNomEm(Personne.NOM_GLOBAL);
                 objetXml.setMailExpediteur(Personne.EMAIL);
