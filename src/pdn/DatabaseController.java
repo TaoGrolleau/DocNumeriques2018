@@ -71,7 +71,7 @@ public class DatabaseController {
             statement = connection.createStatement();
             statement.execute("create table personne (" +
             "    numero_auto INT PRIMARY KEY, " +
-            "    date_autorisation VARCHAR(10), " +
+            "    date_autorisation VARCHAR(50), " +
             "    prenom VARCHAR(20), " +
             "    nom VARCHAR(20), " +
             "    email VARCHAR(100)" +

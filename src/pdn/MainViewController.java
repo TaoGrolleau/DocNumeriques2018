@@ -4,12 +4,14 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.ListProperty;
@@ -444,16 +446,19 @@ public class MainViewController implements Initializable {
                                 Message reponse = new Message();
                                 if(lastMessage.getTypeMessage().equalsIgnoreCase("Demande D'authorisation")){
                                     reponse.setTypeMessage("Auth");
-                                    Date today = Date.from(Instant.now());
+                                    String today = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(new Date());
                                     objetXML.setSignatureAuthorisation(today);
                                     personneSelected.setSignatureAuthorisation(today);
+                                    System.out.println("personneSelected.getSignatureAuthorisation() : " + personneSelected.getSignatureAuthorisation());
                                     PersonneDAO.update(personneSelected);
                                 } else {
                                     reponse.setTypeMessage("Accep");
+                                    System.out.println("personneSelected.getSignatureAuthorisation() : " + personneSelected.getSignatureAuthorisation());
                                     objetXML.setSignatureAuthorisation(personneSelected.getSignatureAuthorisation());
                                 }
                                 reponse.setStatut(Message.STATUT_ACCEPTE);
-                                MessageDAO.update(reponse);
+                                int idReponse = MessageDAO.insererMessage(reponse.getIdMessageParent(), reponse.getTypeMessage());
+                                reponse.setIdMessage(idReponse);
                                 messages.add(reponse);
                                 objetXML.setMessages(messages);
                                 objetXML.CreateXmlFile();

@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -46,7 +48,7 @@ public class PersonneDAO extends DatabaseController {
             while (rs.next()) {
 
                 personne.setNumeroAuthorisation(rs.getInt("numero_auto"));
-                personne.setDate(rs.getString("date_autorisation"));
+                personne.setSignatureAuthorisation(rs.getString("date_autorisation"));
                 personne.setNom(rs.getString("nom"));
                 personne.setPrenom(rs.getString("prenom"));
                 personne.setEmail(rs.getString("email"));

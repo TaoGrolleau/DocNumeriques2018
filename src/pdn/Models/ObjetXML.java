@@ -15,7 +15,7 @@ public class ObjetXML {
     private String nomEm;
     private String nomRecepteur;
     private String numAuthorisation;
-    private Date signatureAuthorisation;
+    private String signatureAuthorisation;
     private int dureeValidite;
     private String mailDestinataire;
     private String mailExpediteur;
@@ -32,4 +32,5 @@ public class ObjetXML {
         XMLFileFactory fileFactory = new XMLFileFactory();
         fileFactory.CreateXmlFile(this);
     }
+
 }

@@ -188,7 +188,7 @@ public class Parser {
                     }
                     if (!messageEnCours.getElementsByTagName("Prop").item(0).getTextContent().equals("")) {
                         if (!document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent().equals("") && !this.noAuth) {
-                            this.fichier.setSignatureAuthorisation((Date) new SimpleDateFormat("dd/MM/yyyy").parse(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent()));
+                            this.fichier.setSignatureAuthorisation(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent());
                         } else if (!this.noAuth) {
                             throw new IOException();
                         }
@@ -285,7 +285,7 @@ public class Parser {
                     }
                     if (!messageEnCours.getElementsByTagName("Auth").item(0).getTextContent().equals("")) {
                         if (!document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent().equals("") && !this.noAuth) {
-                            this.fichier.setSignatureAuthorisation((Date) new SimpleDateFormat("dd/MM/yyyy").parse(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent()));
+                            this.fichier.setSignatureAuthorisation(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent());
                         } else if (!this.noAuth) {
                             throw new IOException();
                         }
@@ -299,7 +299,7 @@ public class Parser {
                     }
                     if (!messageEnCours.getElementsByTagName("Dmd").item(0).getTextContent().equals("")) {
                         if (!document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent().equals("") && !this.noAuth) {
-                            this.fichier.setSignatureAuthorisation((Date) new SimpleDateFormat("dd/MM/yyyy").parse(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent()));
+                            this.fichier.setSignatureAuthorisation(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent());
                         } else if (!this.noAuth) {
                             throw new IOException();
                         }
@@ -318,7 +318,7 @@ public class Parser {
                     }
                     if (!messageEnCours.getElementsByTagName("Accep").item(0).getTextContent().equals("")) {
                         if (!document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent().equals("") && !this.noAuth) {
-                            this.fichier.setSignatureAuthorisation((Date) new SimpleDateFormat("dd/MM/yyyy").parse(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent()));
+                            this.fichier.setSignatureAuthorisation(document.getElementsByTagName("DtOfSgtAuto").item(0).getTextContent());
                         } else if (!this.noAuth) {
                             throw new IOException();
                         }

@@ -14,7 +14,7 @@ public class Personne implements Serializable {
     public static final String NOM_GLOBAL = "Eudes Delabuissonniere";
     
     private Integer numeroAuthorisation;
-    private Date signatureAuthorisation;
+    private String signatureAuthorisation;
     private List<Message> messages;
     private String date;
     private String nom;
