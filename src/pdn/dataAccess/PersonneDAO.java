@@ -1,5 +1,6 @@
 package pdn.dataAccess;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -67,5 +68,21 @@ public class PersonneDAO extends DatabaseController {
             Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
+    }
+    
+     public static void update(Personne p) {
+        String sql = "UPDATE personne SET date_autorisation = ? AND prenom = ? AND nom = ? AND email = ? WHERE numero_auto = ?; ";
+ 
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+ 
+            pstmt.setString(1, p.getSignatureAuthorisation().toString());
+            pstmt.setString(2, p.getPrenom());
+            pstmt.setString(3, p.getNom());
+            pstmt.setString(4, p.getEmail());
+            pstmt.setInt(5, p.getNumeroAuthorisation());
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, "update error", ex);
+        }
     }
 }
