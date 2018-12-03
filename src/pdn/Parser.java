@@ -71,12 +71,13 @@ public class Parser {
                 System.out.print("Pas de nom de destinataire");
                 throw new IOException();
             }
-            if (!document.getElementsByTagName("NumAuto").item(0).getTextContent().equals("")) {
+            if (!document.getElementsByTagName("NumAuto").item(0).getTextContent().equals("null")) {
                 this.fichier.setNumAuthorisation(document.getElementsByTagName("NumAuto").item(0).getTextContent());
             } else {
+                System.out.println("c'est une demande d'autorisation");
                 this.noAuth = true;
             }
-            if (!document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().equals("") && !this.noAuth) {
+            if (!document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().equals("null") && !this.noAuth) {
                 this.fichier.setDureeValidite(Integer.parseInt(document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().trim()));
             } else if (!this.noAuth) {
                 System.out.print("Pas de duree de validite");
@@ -131,7 +132,7 @@ public class Parser {
                 Calendar c = Calendar.getInstance();
                 c.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(message.getDateMessage()));
                 c.add(Calendar.DATE, message.getDureeValiditeMessage());
-                if (today.before(c)) {
+                if (today.after(c)) {
                     System.out.println("Message perimé");
                     throw new IOException();
                 }
