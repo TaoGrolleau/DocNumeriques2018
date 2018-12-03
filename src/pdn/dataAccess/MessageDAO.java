@@ -52,23 +52,23 @@ public class MessageDAO extends DatabaseController {
     }
 
     public static int insererMessage(Long idMessageParent, String type) {
-        int idMessage=0;
+        ResultSet rs;
+        PreparedStatement prepStatement;
         try {
-            PreparedStatement statement;
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery("SELECT MAX( id_message ) FROM message");
+            int id = rs.getInt(1) + 1;
             if (idMessageParent != null) {
-                statement = connection.prepareStatement("insert into message (id_message_parent, statut, typeMessage) values (" + idMessageParent + ", 'non_lu', \'" + type + "\'); ", Statement.RETURN_GENERATED_KEYS);
+                prepStatement = connection.prepareStatement("insert into message (id_message, id_message_parent, statut, typeMessage) values (" + id + ", " + idMessageParent + ", 'non_lu', \'" + type + "\'); ");
             } else {
-                statement = connection.prepareStatement("insert into message (statut, typeMessage) values ('non_lu', \'" + type + "\'); ");
+                prepStatement = connection.prepareStatement("insert into message (id_message, statut, typeMessage) values (" + id + ", 'non_lu', \'" + type + "\'); ");
             }
-            statement.execute();
-            ResultSet rs = statement.getGeneratedKeys();
-            if(rs.next()){
-                idMessage = rs.getInt(1);
-            }
+            prepStatement.execute();
+            return id;
         } catch (SQLException ex) {
-            Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PersonneDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return idMessage;
+        return 0;
     }
 
     public static void associerMessagePersonne(int idMessage, int idPersonne) {

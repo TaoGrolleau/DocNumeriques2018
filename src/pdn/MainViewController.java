@@ -141,17 +141,6 @@ public class MainViewController implements Initializable {
     List<Message> messages = new ArrayList<>();
 
     RadioButton selectedtypeMessage;
-    
-    public void refreshContacts(){
-        List<String> contactsList = new ArrayList<>();
-        PersonneDAO.getAllPersonne()
-                .forEach(personne -> {
-                    contactsList.add(personne.getPrenom() + " " + personne.getNom());
-                });
-        contactListProperty.set(FXCollections.observableArrayList(contactsList));
-        contacts.itemsProperty().bind(contactListProperty);
-        contactListView.itemsProperty().bind(contactListProperty);
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

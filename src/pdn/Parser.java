@@ -463,8 +463,6 @@ public class Parser {
             return false;
         }
         System.out.print("Insertion en base réussie");
-        MainViewController mvc = new MainViewController();
-        mvc.refreshContacts();
         return true;
     }
 

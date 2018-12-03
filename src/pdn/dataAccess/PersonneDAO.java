@@ -63,7 +63,9 @@ public class PersonneDAO extends DatabaseController {
         ResultSet rs;
         try {
             Statement statement = connection.createStatement();
-            statement.execute("insert into personne (numero_auto, prenom, nom, email) values (SELECT MAX( numero_auto ) FROM customers) +1,\'" + prenom + "\', \'" + nom + "\', \'" + mail +"\');");
+            rs = statement.executeQuery("SELECT MAX( numero_auto ) FROM personne");
+            long id = rs.getInt(1) + 1;
+            statement.execute("insert into personne (numero_auto, prenom, nom, email) values (" + id + ",\'" + prenom + "\', \'" + nom + "\', \'" + mail +"\');");
             rs = statement.executeQuery("select numero_auto from personne where prenom=\'" + prenom + "\' and nom=\'" + nom +"\' and email=\'" + mail + "\';");
             return rs.getInt("numero_auto");
         } catch (SQLException ex) {
