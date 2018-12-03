@@ -44,15 +44,15 @@ import pdn.dataAccess.ObjetDAO;
 import pdn.dataAccess.PersonneDAO;
 
 public class MainViewController implements Initializable {
-    
+
     private final String PATH = "././createdFiles/file.xml";
-    
+
     @FXML
     private TabPane tab_pane;
-    
+
     @FXML
     private Tab tab_createFile;
-    
+
     private SingleSelectionModel<Tab> tabSelect;
 
     @FXML
@@ -211,6 +211,8 @@ public class MainViewController implements Initializable {
                 newObjectProposed.setDescriptions(objectDescriptions);
 
                 listObjetProposed.add(newObjectProposed);
+                nameObjectProposed.setText("");
+                typeObjectProposed.setText("");
                 listParameterObjetProposed.clear();
 
                 System.out.println(listObjetProposed.toString());
@@ -235,6 +237,8 @@ public class MainViewController implements Initializable {
                 newObjetAsked.setDescriptions(objectDescriptions);
 
                 listObjetAsked.add(newObjetAsked);
+                nameObjectAsked.setText("");
+                typeObjectAsked.setText("");
                 listParameterObjetAsked.clear();
 
                 System.out.println(listObjetAsked.toString());
@@ -268,11 +272,15 @@ public class MainViewController implements Initializable {
 
                 newMessage.setTypeMessage(typeMessage);
                 newMessage.setTitreProposition(field_titleProposition);
+                int idMessage = MessageDAO.insererMessage(null, typeMessage);
+                newMessage.setIdMessage(idMessage);
 
                 messages.add(newMessage);
+                titleProposition.setText("");
                 listObjetProposed.clear();
                 listObjetAsked.clear();
-                System.out.println(messages.toString());
+                list_objetProposed.getItems().clear();
+                list_objetAsked.getItems().clear();
                 ObservableList<Message> items = FXCollections.observableArrayList(messages);
                 list_Propositions.setItems(items);
 
@@ -293,7 +301,7 @@ public class MainViewController implements Initializable {
                     newMessage.setDateMessage(dateSignature);
                     newMessage.setDureeValiditeMessage(14);
                     newMessage.setTypeMessage(selectedtypeMessage.getText());
-                    
+
                     String field_nameContact = nameContact.getText();
                     String field_mailContact = emailContact.getText();
                     objetXml.setNomRecepteur(field_nameContact);
@@ -327,6 +335,7 @@ public class MainViewController implements Initializable {
                 } catch (FileNotFoundException | UnsupportedEncodingException ex) {
                 }
                 messages.clear();
+                list_Propositions.getItems().clear();
 
                 System.out.println(objetXml.toString());
             }
@@ -433,7 +442,7 @@ public class MainViewController implements Initializable {
                     btn_answerMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
-                            
+
                             ObjetXML objetXML = new ObjetXML();
                             try {
                                 objetXML.setNomEm(Personne.NOM);
@@ -444,7 +453,7 @@ public class MainViewController implements Initializable {
                                 objetXML.setMailExpediteur(Personne.EMAIL);
                                 objetXML.setPathFichier(PATH);
                                 Message reponse = new Message();
-                                if(lastMessage.getTypeMessage().equalsIgnoreCase("Demande D'authorisation")){
+                                if (lastMessage.getTypeMessage().equalsIgnoreCase("Demande D'authorisation")) {
                                     reponse.setTypeMessage("Auth");
                                     String today = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(new Date());
                                     objetXML.setSignatureAuthorisation(today);
@@ -502,7 +511,7 @@ public class MainViewController implements Initializable {
                             transactionListView.itemsProperty().bind(transactionListProperty);
                         }
                     });
-                    
+
                     btn_CounterProposalMessage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
