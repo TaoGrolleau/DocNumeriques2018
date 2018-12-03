@@ -63,7 +63,7 @@ public class MessageDAO extends DatabaseController {
             statement.execute();
             ResultSet rs = statement.getGeneratedKeys();
             if(rs.next()){
-                idMessage = rs.getInt("id_message");
+                idMessage = rs.getInt(0);
             }
         } catch (SQLException ex) {
             Logger.getLogger(MessageDAO.class.getName()).log(Level.SEVERE, null, ex);
