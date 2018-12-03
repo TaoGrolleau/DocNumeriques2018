@@ -71,13 +71,13 @@ public class Parser {
                 System.out.print("Pas de nom de destinataire");
                 throw new IOException();
             }
-            if (!document.getElementsByTagName("NumAuto").item(0).getTextContent().equals("null")) {
+            if (!document.getElementsByTagName("NumAuto").item(0).getTextContent().equals("null") && !document.getElementsByTagName("NumAuto").item(0).getTextContent().equals("")) {
                 this.fichier.setNumAuthorisation(document.getElementsByTagName("NumAuto").item(0).getTextContent());
             } else {
                 System.out.println("c'est une demande d'autorisation");
                 this.noAuth = true;
             }
-            if (!document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().equals("null") && !this.noAuth) {
+            if (!document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().equals("null") && !document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().equals("") && !this.noAuth) {
                 this.fichier.setDureeValidite(Integer.parseInt(document.getElementsByTagName("DureeValidAuto").item(0).getTextContent().trim()));
             } else if (!this.noAuth) {
                 System.out.print("Pas de duree de validite");
@@ -151,7 +151,7 @@ public class Parser {
                         message.setIdMessage(Integer.parseInt(messageEnCours.getAttribute("MsgId").trim()));
                     }
                     if (messageEnCours.hasAttribute("ReponseA")) {
-                        if (!messageEnCours.getAttribute("ReponseA").trim().equals("null")) {
+                        if (!messageEnCours.getAttribute("ReponseA").trim().equals("null") && !messageEnCours.getAttribute("ReponseA").trim().equals("")) {
                             message.setIdMessageParent(Integer.parseInt(messageEnCours.getAttribute("ReponseA").trim()));
                         }
                     }

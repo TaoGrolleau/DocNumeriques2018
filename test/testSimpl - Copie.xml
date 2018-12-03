@@ -6,15 +6,15 @@
   <NmIR>Eudes DeLaBuissoniere</NmIR>
   <NumAuto></NumAuto>
   <DtOfSgtAuto> 08/11/2018 </DtOfSgtAuto>
-  <DureeValidAuto></DureeValidAuto>
-  <MailDest>Dieu@laposte.net</MailDest>
-  <MailExp>Humanite@yahoo.fr</MailExp>
+  <DureeValidAuto> 0 </DureeValidAuto>
+  <MailDest>Humanite@yahoo.fr</MailDest>
+  <MailExp>Dieu@laposte.net</MailExp>
 </Header>
 <Body>
   <CollMess NbOfTxs="1">
     <Message MsgId="15268">
       <Dte> 08/11/2018 </Dte>
-      <DureeValideMsg> 10 </DureeValideMsg>
+      <DureeValideMsg> 90 </DureeValideMsg>
       <Dmd>
         <DescDmd> Salut, tu veux être mon ami ? </DescDmd>
         <DateDebut> 08/11/2018 </DateDebut>
