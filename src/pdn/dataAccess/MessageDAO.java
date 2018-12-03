@@ -71,7 +71,7 @@ public class MessageDAO extends DatabaseController {
         return idMessage;
     }
 
-    public static void associerMessagePersonne(Long idMessage, int idPersonne) {
+    public static void associerMessagePersonne(int idMessage, int idPersonne) {
         Statement statement;
         try {
             statement = connection.createStatement();
