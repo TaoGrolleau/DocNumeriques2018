@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -437,7 +438,6 @@ public class MainViewController implements Initializable {
                                 objetXML.setNomEm(Personne.NOM);
                                 objetXML.setNomRecepteur(personneSelected.toString());
                                 objetXML.setNumAuthorisation(personneSelected.getNumeroAuthorisation().toString());
-                                objetXML.setSignatureAuthorisation(personneSelected.getSignatureAuthorisation());
                                 objetXML.setDureeValidite(lastMessage.getDureeValiditeMessage());
                                 objetXML.setMailDestinataire(personneSelected.getEmail());
                                 objetXML.setMailExpediteur(Personne.EMAIL);
@@ -445,10 +445,16 @@ public class MainViewController implements Initializable {
                                 Message reponse = new Message();
                                 if(lastMessage.getTypeMessage().equalsIgnoreCase("Demande D'authorisation")){
                                     reponse.setTypeMessage("Auth");
+                                    Date today = Date.from(Instant.now());
+                                    objetXML.setSignatureAuthorisation(today);
+                                    personneSelected.setSignatureAuthorisation(today);
+                                    PersonneDAO.update(personneSelected);
                                 } else {
                                     reponse.setTypeMessage("Accep");
+                                    objetXML.setSignatureAuthorisation(personneSelected.getSignatureAuthorisation());
                                 }
                                 reponse.setStatut(Message.STATUT_ACCEPTE);
+                                MessageDAO.update(reponse);
                                 messages.add(reponse);
                                 objetXML.setMessages(messages);
                                 objetXML.CreateXmlFile();
